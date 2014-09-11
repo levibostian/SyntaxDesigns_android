@@ -8,8 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.activity.MainActivity;
+import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
+import edu.uni.cs.syntaxdesigns.util.ImageUtil;
+import edu.uni.cs.syntaxdesigns.util.LogUtil;
+
+import javax.inject.Inject;
 
 public class MainFragment extends Fragment {
+
+    @Inject ImageUtil mImageUtil;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -19,6 +26,15 @@ public class MainFragment extends Fragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        SyntaxDesignsApplication.inject(this);
+
+        LogUtil.d(mImageUtil.testDaggerWorks());
     }
 
     @Override
