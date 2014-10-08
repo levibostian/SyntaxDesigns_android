@@ -4,6 +4,7 @@ import android.app.Application;
 import dagger.ObjectGraph;
 import edu.uni.cs.syntaxdesigns.module.FragmentModule;
 import edu.uni.cs.syntaxdesigns.module.UtilModule;
+import edu.uni.cs.syntaxdesigns.module.YummlyModule;
 import edu.uni.cs.syntaxdesigns.util.LogUtil;
 
 import javax.inject.Inject;
@@ -24,7 +25,8 @@ public class SyntaxDesignsApplication extends Application {
     protected List<Object> getModules() {
         return Arrays.asList(
             new UtilModule(this),
-            new FragmentModule()
+            new FragmentModule(),
+            new YummlyModule(this)
         );
     }
 

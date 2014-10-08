@@ -9,5 +9,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
+    <string name="app_id">018d2c56</string>
+    <string name="app_key">81b86f1ca40d639d48561e68d67c04e7</string>
 
 </resources>
