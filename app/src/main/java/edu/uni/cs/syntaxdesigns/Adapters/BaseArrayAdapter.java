@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BaseArrayAdapter<T> extends ArrayAdapter<T> {
 
-    private LayoutInflater mInflater;
+    protected LayoutInflater mInflater;
 
     public BaseArrayAdapter(Context context, int resource, List<T> objects) {
         super(context, resource, objects);

@@ -13,14 +13,13 @@ import java.util.List;
 public class SearchByPhraseAdapter extends BaseArrayAdapter {
 
     private List<PhraseResults> mResults;
-    private LayoutInflater mLayoutInflater;
 
     public SearchByPhraseAdapter(Context context, List<PhraseResults> results) {
         super(context, 0, results);
 
         mResults = results;
 
-        mLayoutInflater = LayoutInflater.from(context);
+        mInflater = LayoutInflater.from(context);
     }
 
     private static class ViewHolder {
@@ -33,7 +32,7 @@ public class SearchByPhraseAdapter extends BaseArrayAdapter {
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.test_list_row, parent, false);
+            convertView = mInflater.inflate(R.layout.test_list_row, parent, false);
 
             viewHolder = new ViewHolder();
 

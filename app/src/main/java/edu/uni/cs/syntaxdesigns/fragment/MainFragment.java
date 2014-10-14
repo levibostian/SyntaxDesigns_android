@@ -78,7 +78,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(),"Retrofit Error", Toast.LENGTH_SHORT);
+                Toast.makeText(getActivity(),"Error searching for recipes, try the search again", Toast.LENGTH_SHORT);
                 error.printStackTrace();
             }
         });
