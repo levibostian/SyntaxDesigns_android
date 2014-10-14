@@ -17,6 +17,7 @@ import edu.uni.cs.syntaxdesigns.activity.MainActivity;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
 import edu.uni.cs.syntaxdesigns.util.LogUtil;
+import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -68,9 +69,8 @@ public class MainFragment extends Fragment {
     }
 
     private void initializeListView() {
-        Resources resources = getActivity().getResources();
         String testQuery = "onion soup";
-        mYummlyApi.searchByPhrase(resources.getString(R.string.app_id), resources.getString(R.string.app_key), testQuery,new Callback<SearchByPhraseVo>() {
+        mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()), YummlyUtil.getApplicationKey(getActivity()), testQuery,new Callback<SearchByPhraseVo>() {
             @Override
             public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
                 initializeListViewAdapter(searchByPhraseVo);
@@ -78,7 +78,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(),"Error searching for recipes, try the search again", Toast.LENGTH_SHORT);
+                Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
                 error.printStackTrace();
             }
         });
