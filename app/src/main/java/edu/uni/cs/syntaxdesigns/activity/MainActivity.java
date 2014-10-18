@@ -10,9 +10,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import edu.uni.cs.syntaxdesigns.fragment.GroceryListFragment;
 import edu.uni.cs.syntaxdesigns.fragment.NewRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.NavigationDrawerFragment;
 import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.fragment.SavedRecipesFragment;
 
 import java.util.Locale;
 
@@ -126,9 +128,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 case 0:
                     return NewRecipesFragment.newInstance(position);
                 case 1:
-                    return NewRecipesFragment.newInstance(position);
+                    return GroceryListFragment.newInstance(position);
                 case 2:
-                    return NewRecipesFragment.newInstance(position);
+                    return SavedRecipesFragment.newInstance(position);
                 default:
                     return NewRecipesFragment.newInstance(position);
             }

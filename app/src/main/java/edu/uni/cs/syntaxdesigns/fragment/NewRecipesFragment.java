@@ -32,7 +32,7 @@ public class NewRecipesFragment extends Fragment {
     @Inject ImageUtil mImageUtil;
     @Inject YummlyApi mYummlyApi;
 
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_SECTION_NUMBER = "newRecipes.section_number";
 
     public static NewRecipesFragment newInstance(int sectionNumber) {
         NewRecipesFragment fragment = new NewRecipesFragment();
@@ -53,7 +53,7 @@ public class NewRecipesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_new_recipes, container, false);
 
         mListView = (ListView) rootView.findViewById(R.id.test_list_view);
 
