@@ -1,9 +1,9 @@
 package edu.uni.cs.syntaxdesigns.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.res.Resources;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +24,7 @@ import retrofit.client.Response;
 
 import javax.inject.Inject;
 
-public class MainFragment extends Fragment {
+public class NewRecipesFragment extends Fragment {
 
     private ListView mListView;
     private SearchByPhraseAdapter mAdapter;
@@ -34,8 +34,8 @@ public class MainFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public static MainFragment newInstance(int sectionNumber) {
-        MainFragment fragment = new MainFragment();
+    public static NewRecipesFragment newInstance(int sectionNumber) {
+        NewRecipesFragment fragment = new NewRecipesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);

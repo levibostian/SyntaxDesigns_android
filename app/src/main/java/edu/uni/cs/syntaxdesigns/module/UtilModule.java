@@ -3,7 +3,6 @@ package edu.uni.cs.syntaxdesigns.module;
 import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
-import edu.uni.cs.syntaxdesigns.fragment.MainFragment;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
 
 @Module(library = true)
