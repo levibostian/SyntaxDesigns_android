@@ -14,8 +14,6 @@ public class YummlyModule {
 
     private SyntaxDesignsApplication mApplication;
     private final ObjectMapper mapper = new ObjectMapper();
-    public final static String APP_ID = "018d2c56";
-    public final static String APP_KEY = "81b86f1ca40d639d48561e68d67c04e7";
     private static String YUMMLY_API = "http://api.yummly.com/v1/api";
 
     public YummlyModule(SyntaxDesignsApplication application) {
@@ -26,7 +24,6 @@ public class YummlyModule {
     RestAdapter provideRestAdapter() {
         return new RestAdapter.Builder().setEndpoint(YUMMLY_API).setConverter(new JacksonConverter(mapper)).build();
     }
-
 
     @Provides
     public YummlyApi YummlyApi(RestAdapter restAdapter) {
