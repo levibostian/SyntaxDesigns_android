@@ -2,9 +2,9 @@
 <resources>
 
     <string name="app_name">SyntaxDesigns</string>
-    <string name="title_section1">New Recipes</string>
-    <string name="title_section2">Grocery List</string>
-    <string name="title_section3">Saved Recipes</string>
+    <string name="find_recipes">Find Recipes</string>
+    <string name="grocery_list">Grocery List</string>
+    <string name="saved_recipes">Saved Recipes</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

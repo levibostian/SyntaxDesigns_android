@@ -1,7 +1,5 @@
 package edu.uni.cs.syntaxdesigns.fragment;
 
-import android.app.Activity;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import edu.uni.cs.syntaxdesigns.Adapters.SearchByPhraseAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
-import edu.uni.cs.syntaxdesigns.activity.MainActivity;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
 import edu.uni.cs.syntaxdesigns.util.LogUtil;
@@ -60,12 +57,6 @@ public class NewRecipesFragment extends Fragment {
         initializeListView();
 
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
     private void initializeListView() {
