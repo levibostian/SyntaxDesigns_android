@@ -49,6 +49,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
+                mDrawerLayout.closeDrawer(Gravity.RIGHT);
             }
         });
 
