@@ -10,5 +10,6 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
     <string name="yummly_error">Error searching for recipes, try the search again</string>
+    <string name="filter_results">Filter results</string>
 
 </resources>
