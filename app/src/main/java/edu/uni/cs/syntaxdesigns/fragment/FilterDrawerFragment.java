@@ -26,10 +26,18 @@ public class FilterDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
+        setFilterFragment(filterFragment);
+    }
+
+    public void setFilterFragment(Fragment filter) {
+        setFilter(filter);
+    }
+
+    private void setFilter(Fragment filter) {
         getActivity().getSupportFragmentManager()
                      .beginTransaction()
-                     .add(R.id.filter_content, filterFragment)
-                .commit();
+                     .replace(R.id.filter_content, filter)
+                     .commit();
     }
 
     @Override

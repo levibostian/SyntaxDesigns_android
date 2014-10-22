@@ -12,6 +12,7 @@ import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
+import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
 import edu.uni.cs.syntaxdesigns.util.LogUtil;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
@@ -21,7 +22,7 @@ import retrofit.client.Response;
 
 import javax.inject.Inject;
 
-public class NewRecipesFragment extends Fragment {
+public class NewRecipesFragment extends FilteringFragment {
 
     private ListView mListView;
     private SearchByPhraseAdapter mAdapter;
@@ -78,5 +79,10 @@ public class NewRecipesFragment extends Fragment {
     private void initializeListViewAdapter(SearchByPhraseVo searchByPhraseResults) {
         SearchByPhraseAdapter mAdapter = new SearchByPhraseAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
         mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public Fragment getFilterFragment() {
+        return NewRecipesFilterFragment.newInstance();
     }
 }

@@ -1,13 +1,14 @@
 package edu.uni.cs.syntaxdesigns.fragment;
 
-import edu.uni.cs.syntaxdesigns.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.fragment.filter.SavedRecipesFilterFragment;
 
-public class SavedRecipesFragment extends Fragment {
+public class SavedRecipesFragment extends FilteringFragment {
 
     private static final String ARG_SECTION_NUMBER = "savedRecipes.section_number";
 
@@ -24,5 +25,10 @@ public class SavedRecipesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_saved_recipes, container, false);
 
         return rootView;
+    }
+
+    @Override
+    public Fragment getFilterFragment() {
+        return SavedRecipesFilterFragment.newInstance();
     }
 }

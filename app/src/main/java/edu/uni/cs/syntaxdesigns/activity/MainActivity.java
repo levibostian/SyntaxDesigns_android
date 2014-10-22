@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.fragment.FilterDrawerFragment;
+import edu.uni.cs.syntaxdesigns.fragment.FilteringFragment;
 import edu.uni.cs.syntaxdesigns.fragment.GroceryListFragment;
 import edu.uni.cs.syntaxdesigns.fragment.NewRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.SavedRecipesFragment;
@@ -21,7 +22,7 @@ import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
 
 import java.util.Locale;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FilteringFragment.FilterFragmentListener {
 
     private FilterDrawerFragment mFilterDrawerFragment;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -50,6 +51,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
+
+                ((FilteringFragment) mSectionsPagerAdapter.getItem(position)).setFilterFragmentListener(MainActivity.this);
             }
         });
 
@@ -94,15 +97,22 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
     }
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
 
+    @Override
+    public void setFilterFragment(Fragment filter) {
+        mFilterDrawerFragment.setFilterFragment(filter);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private NewRecipesFragment mNewRecipesFragment;
+        private GroceryListFragment mGroceryListFragment;
+        private SavedRecipesFragment mSavedRecipesFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -112,13 +122,25 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             switch(position) {
                 case 0:
-                    return NewRecipesFragment.newInstance(position);
+                    if (mNewRecipesFragment == null) {
+                        mNewRecipesFragment = NewRecipesFragment.newInstance(position);
+                    }
+                    return mNewRecipesFragment;
                 case 1:
-                    return GroceryListFragment.newInstance(position);
+                    if (mGroceryListFragment == null) {
+                        mGroceryListFragment = GroceryListFragment.newInstance(position);
+                    }
+                    return mGroceryListFragment;
                 case 2:
-                    return SavedRecipesFragment.newInstance(position);
+                    if (mSavedRecipesFragment == null) {
+                        mSavedRecipesFragment = SavedRecipesFragment.newInstance(position);
+                    }
+                    return mSavedRecipesFragment;
                 default:
-                    return NewRecipesFragment.newInstance(position);
+                    if (mNewRecipesFragment == null) {
+                        mNewRecipesFragment = NewRecipesFragment.newInstance(position);
+                    }
+                    return mNewRecipesFragment;
             }
         }
 
