@@ -14,7 +14,6 @@ import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
-import edu.uni.cs.syntaxdesigns.util.LogUtil;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -24,18 +23,16 @@ import javax.inject.Inject;
 
 public class NewRecipesFragment extends FilteringFragment {
 
+    private NewRecipesFilterFragment mFilterFragment;
     private ListView mListView;
     private SearchByPhraseAdapter mAdapter;
 
     @Inject ImageUtil mImageUtil;
     @Inject YummlyApi mYummlyApi;
 
-    private static final String ARG_SECTION_NUMBER = "newRecipes.section_number";
-
-    public static NewRecipesFragment newInstance(int sectionNumber) {
+    public static NewRecipesFragment newInstance() {
         NewRecipesFragment fragment = new NewRecipesFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,7 +43,7 @@ public class NewRecipesFragment extends FilteringFragment {
 
         SyntaxDesignsApplication.inject(this);
 
-        LogUtil.d(mImageUtil.testDaggerWorks());
+        mFilterFragment = NewRecipesFilterFragment.newInstance();
     }
 
     @Override
@@ -83,6 +80,6 @@ public class NewRecipesFragment extends FilteringFragment {
 
     @Override
     public Fragment getFilterFragment() {
-        return NewRecipesFilterFragment.newInstance();
+        return mFilterFragment;
     }
 }

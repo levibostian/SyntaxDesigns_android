@@ -10,14 +10,20 @@ import edu.uni.cs.syntaxdesigns.fragment.filter.SavedRecipesFilterFragment;
 
 public class SavedRecipesFragment extends FilteringFragment {
 
-    private static final String ARG_SECTION_NUMBER = "savedRecipes.section_number";
+    private SavedRecipesFilterFragment mFilterFragment;
 
-    public static SavedRecipesFragment newInstance(int sectionNumber) {
+    public static SavedRecipesFragment newInstance() {
         SavedRecipesFragment fragment = new SavedRecipesFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mFilterFragment = SavedRecipesFilterFragment.newInstance();
     }
 
     @Override
@@ -29,6 +35,6 @@ public class SavedRecipesFragment extends FilteringFragment {
 
     @Override
     public Fragment getFilterFragment() {
-        return SavedRecipesFilterFragment.newInstance();
+        return mFilterFragment;
     }
 }
