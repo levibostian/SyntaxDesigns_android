@@ -1,7 +1,5 @@
 package edu.uni.cs.syntaxdesigns.fragment;
 
-import android.app.Activity;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,10 +11,9 @@ import edu.uni.cs.syntaxdesigns.Adapters.SearchByPhraseAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
-import edu.uni.cs.syntaxdesigns.activity.MainActivity;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
+import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
-import edu.uni.cs.syntaxdesigns.util.LogUtil;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -24,20 +21,18 @@ import retrofit.client.Response;
 
 import javax.inject.Inject;
 
-public class NewRecipesFragment extends Fragment {
+public class NewRecipesFragment extends FilteringFragment {
 
+    private NewRecipesFilterFragment mFilterFragment;
     private ListView mListView;
     private SearchByPhraseAdapter mAdapter;
 
     @Inject ImageUtil mImageUtil;
     @Inject YummlyApi mYummlyApi;
 
-    private static final String ARG_SECTION_NUMBER = "newRecipes.section_number";
-
-    public static NewRecipesFragment newInstance(int sectionNumber) {
+    public static NewRecipesFragment newInstance() {
         NewRecipesFragment fragment = new NewRecipesFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,7 +43,7 @@ public class NewRecipesFragment extends Fragment {
 
         SyntaxDesignsApplication.inject(this);
 
-        LogUtil.d(mImageUtil.testDaggerWorks());
+        mFilterFragment = NewRecipesFilterFragment.newInstance();
     }
 
     @Override
@@ -60,12 +55,6 @@ public class NewRecipesFragment extends Fragment {
         initializeListView();
 
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
     private void initializeListView() {
@@ -87,5 +76,10 @@ public class NewRecipesFragment extends Fragment {
     private void initializeListViewAdapter(SearchByPhraseVo searchByPhraseResults) {
         SearchByPhraseAdapter mAdapter = new SearchByPhraseAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
         mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public Fragment getFilterFragment() {
+        return mFilterFragment;
     }
 }
