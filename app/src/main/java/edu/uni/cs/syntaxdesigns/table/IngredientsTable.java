@@ -22,8 +22,7 @@ public final class IngredientsTable extends DatabaseTable {
         private static final ForeignKeyColumn RECIPE_ID = new ForeignKeyColumn("recipeId", ColumnType.INTEGER, RecipeTable.getTableName(), RecipeTable.Columns._ID, true, true);
     }
 
-    @Override
-    public final String getCreateQuery() {
+    public static final String getCreateQuery() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
                Info._ID + " INTEGER PRIMARY KEY," +
                Info.COLUMN_NAME + "," +

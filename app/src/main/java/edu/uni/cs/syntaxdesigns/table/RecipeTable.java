@@ -21,8 +21,7 @@ public final class RecipeTable extends DatabaseTable {
         private static final TableColumn COLUMN_FAVORITE = new TableColumn("favorite", ColumnType.INTEGER, false, "0");
     }
 
-    @Override
-    public final String getCreateQuery() {
+    public static final String getCreateQuery() {
         return "CREATE TABLE " + TABLE_NAME + " (" +
                Columns._ID + " INTEGER PRIMARY KEY," +
                Columns.COLUMN_NAME + "," +

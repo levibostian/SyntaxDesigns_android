@@ -12,8 +12,6 @@ public abstract class DatabaseTable {
         return mTableName;
     }
 
-    public abstract String getCreateQuery();
-
     public static final String getDeleteQuery() {
         return "DELETE TABLE IF EXISTS " + mTableName;
     }
