@@ -2,12 +2,14 @@ package edu.uni.cs.syntaxdesigns.module;
 
 import android.content.Context;
 import dagger.Module;
+import dagger.Provides;
 import edu.uni.cs.syntaxdesigns.database.SyntaxDesignsSQLiteOpenHelper;
+import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
+import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Module(library = true, complete = false)
+@Module(injects = {RecipeDao.class}, library = true, complete = false)
 public class DatabaseModule {
 
     private Context mContext;
@@ -16,10 +18,22 @@ public class DatabaseModule {
         mContext = context;
     }
 
-    @Inject
+    @Provides
     @Singleton
     SyntaxDesignsSQLiteOpenHelper provideSyntaxDesignsSQLiteOpenHelper() {
         return new SyntaxDesignsSQLiteOpenHelper(mContext);
+    }
+
+    @Provides
+    @Singleton
+    RecipeDao provideRecipeDao(SyntaxDesignsSQLiteOpenHelper openHelper) {
+        return new RecipeDao(openHelper);
+    }
+
+    @Provides
+    @Singleton
+    IngredientsDao provideIngredientsDao(SyntaxDesignsSQLiteOpenHelper openHelper) {
+        return new IngredientsDao(openHelper);
     }
 
 }

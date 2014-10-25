@@ -16,9 +16,9 @@ public final class RecipeTable extends DatabaseTable {
     }
 
     public static final class Columns implements BaseColumns {
-        private static final TableColumn COLUMN_NAME = new TableColumn("name", ColumnType.TEXT, true);
-        private static final TableColumn COLUMN_YUMMLY_URL = new TableColumn("yummlyUrl", ColumnType.TEXT);
-        private static final TableColumn COLUMN_FAVORITE = new TableColumn("favorite", ColumnType.INTEGER, false, "0");
+        public static final TableColumn COLUMN_NAME = new TableColumn("name", ColumnType.TEXT, true);
+        public static final TableColumn COLUMN_YUMMLY_URL = new TableColumn("yummlyUrl", ColumnType.TEXT);
+        public static final TableColumn COLUMN_FAVORITE = new TableColumn("favorite", ColumnType.INTEGER, false, "0");
     }
 
     public static final String getCreateQuery() {
