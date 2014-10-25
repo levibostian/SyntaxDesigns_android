@@ -27,7 +27,7 @@ public class IngredientsDao {
         values.put(IngredientsTable.Columns.COLUMN_HAVE_IT.name, haveIt ? 1 : 0);
         values.put(IngredientsTable.Columns.RECIPE_ID.name, recipeId);
 
-        long rowId = mWritableDatabase.insert(IngredientsTable.getTableName(), "null", values);
+        long rowId = mWritableDatabase.insert(IngredientsTable.TABLE_NAME, "null", values);
 
         if (rowId == INSERT_ERROR_CODE) {
             throw new IllegalStateException("Error inserting ingredient. Maybe a foreign key constraint?");
@@ -42,20 +42,20 @@ public class IngredientsDao {
         IngredientsTable.Columns.COLUMN_HAVE_IT.name,
         IngredientsTable.Columns.RECIPE_ID.name};
 
-        return (IngredientsCursor) mReadableDatabase.query(IngredientsTable.getTableName(),
+        return new IngredientsCursor(mReadableDatabase.query(IngredientsTable.TABLE_NAME,
                                                            columns,
-                                                           IngredientsTable.Columns.RECIPE_ID.name + " = ",
+                                                           IngredientsTable.Columns.RECIPE_ID.name + " = ?",
                                                            new String[] {String.valueOf(recipeId)},
                                                            null,
                                                            null,
-                                                           "_id ASC");
+                                                           "_id ASC"));
     }
 
     public void updateHaveIt(long rowId, boolean haveIt) {
         ContentValues values = new ContentValues();
         values.put(IngredientsTable.Columns.COLUMN_HAVE_IT.name, haveIt ? 1 : 0);
 
-        mWritableDatabase.update(IngredientsTable.getTableName(),
+        mWritableDatabase.update(IngredientsTable.TABLE_NAME,
                                  values,
                                  "_id = ?",
                                  new String[]{String.valueOf(rowId)});

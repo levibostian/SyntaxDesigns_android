@@ -24,8 +24,8 @@ public class ForeignKeyColumn extends TableColumn {
     public String toString() {
         return name + " "
                + columnType.getType() + " "
-               + (notNull ? "NOT NULL" : "") + " "
-               + (defaultValue != null ? ("DEFAULT " + defaultValue) : "") + " "
+               + (notNull ? "NOT NULL " : "")
+               + (defaultValue != null ? ("DEFAULT " + defaultValue + " ") : "")
                + "REFERENCES " + referenceTableName + "(" + referenceColumnName + ")" + " "
                + (deleteCascade ? "ON DELETE CASCADE" : "") + " "
                + (updateCascade ? "ON UPDATE CASCADE" : "");

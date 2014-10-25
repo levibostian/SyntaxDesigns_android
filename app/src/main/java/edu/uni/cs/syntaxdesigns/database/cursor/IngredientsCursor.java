@@ -10,6 +10,10 @@ public class IngredientsCursor extends CursorWrapper {
         super(cursor);
     }
 
+    public long readRowId() {
+        return getLong(getColumnIndexOrThrow(IngredientsTable.Columns._ID));
+    }
+
     public String readName() {
         return getString(getColumnIndexOrThrow(IngredientsTable.Columns.COLUMN_NAME.name));
     }

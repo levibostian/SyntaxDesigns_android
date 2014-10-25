@@ -10,6 +10,10 @@ public class RecipeCursor extends CursorWrapper {
         super(cursor);
     }
 
+    public long readRowId() {
+        return getLong(getColumnIndexOrThrow(RecipeTable.Columns._ID));
+    }
+
     public String readName() {
         return getString(getColumnIndexOrThrow(RecipeTable.Columns.COLUMN_NAME.name));
     }

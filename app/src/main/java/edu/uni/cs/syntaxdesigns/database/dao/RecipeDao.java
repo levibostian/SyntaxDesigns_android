@@ -24,7 +24,7 @@ public class RecipeDao {
         values.put(RecipeTable.Columns.COLUMN_NAME.name, name);
         values.put(RecipeTable.Columns.COLUMN_YUMMLY_URL.name, yummlyUrl);
 
-        return mWritableDatabase.insert(RecipeTable.getTableName(), "null", values);
+        return mWritableDatabase.insert(RecipeTable.TABLE_NAME, "null", values);
     }
 
     public RecipeCursor readRecipes() {
@@ -32,17 +32,31 @@ public class RecipeDao {
                             RecipeTable.Columns.COLUMN_NAME.name,
                             RecipeTable.Columns.COLUMN_FAVORITE.name};
 
-        return (RecipeCursor) mReadableDatabase.query(RecipeTable.getTableName(),
+        return new RecipeCursor(mReadableDatabase.query(RecipeTable.TABLE_NAME,
                                       columns,
                                       null,
                                       null,
                                       null,
                                       null,
-                                      "_id ASC");
+                                      "_id ASC"));
+    }
+
+    public RecipeCursor readRecipeByRowId(long rowId) {
+        String[] columns = {RecipeTable.Columns._ID,
+                            RecipeTable.Columns.COLUMN_NAME.name,
+                            RecipeTable.Columns.COLUMN_FAVORITE.name};
+
+        return new RecipeCursor(mReadableDatabase.query(RecipeTable.TABLE_NAME,
+                                                      columns,
+                                                      RecipeTable.Columns._ID + " = ?",
+                                                      new String[]{String.valueOf(rowId)},
+                                                      null,
+                                                      null,
+                                                      "_id ASC"));
     }
 
     public void deleteRecipe(long rowId) {
-        mWritableDatabase.delete(RecipeTable.getTableName(),
+        mWritableDatabase.delete(RecipeTable.TABLE_NAME,
                                 "_id = ?",
                                 new String[] {String.valueOf(rowId)});
     }
@@ -51,7 +65,7 @@ public class RecipeDao {
         ContentValues values = new ContentValues();
         values.put(RecipeTable.Columns.COLUMN_FAVORITE.name, isFavorite ? 1 : 0);
 
-        mWritableDatabase.update(RecipeTable.getTableName(),
+        mWritableDatabase.update(RecipeTable.TABLE_NAME,
                                 values,
                                 "_id = ?",
                                 new String[] {String.valueOf(rowId)});
