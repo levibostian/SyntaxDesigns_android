@@ -5,9 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-import edu.uni.cs.syntaxdesigns.Adapters.SearchByPhraseAdapter;
+import edu.uni.cs.syntaxdesigns.Adapters.SearchRecipesAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
@@ -25,7 +26,7 @@ public class NewRecipesFragment extends FilteringFragment {
 
     private NewRecipesFilterFragment mFilterFragment;
     private ListView mListView;
-    private SearchByPhraseAdapter mAdapter;
+    private SearchRecipesAdapter mAdapter;
 
     @Inject ImageUtil mImageUtil;
     @Inject YummlyApi mYummlyApi;
@@ -54,12 +55,19 @@ public class NewRecipesFragment extends FilteringFragment {
 
         initializeListView();
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO - start a dialog
+            }
+        });
+
         return rootView;
     }
 
     private void initializeListView() {
-        String testQuery = "onion soup";
-        mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()), YummlyUtil.getApplicationKey(getActivity()), testQuery,new Callback<SearchByPhraseVo>() {
+        String mainDishQuery = "course^course-Main Dishes";
+        mYummlyApi.searchCourse(YummlyUtil.getApplicationId(getActivity()), YummlyUtil.getApplicationKey(getActivity()), mainDishQuery,new Callback<SearchByPhraseVo>() {
             @Override
             public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
                 initializeListViewAdapter(searchByPhraseVo);
@@ -74,7 +82,7 @@ public class NewRecipesFragment extends FilteringFragment {
     }
 
     private void initializeListViewAdapter(SearchByPhraseVo searchByPhraseResults) {
-        SearchByPhraseAdapter mAdapter = new SearchByPhraseAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
+        SearchRecipesAdapter mAdapter = new SearchRecipesAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
         mListView.setAdapter(mAdapter);
     }
 

@@ -9,4 +9,7 @@ public interface YummlyApi {
 
     @GET("/recipes")
     void searchByPhrase(@Query("_app_id") String appId, @Query("_app_key") String appKey, @Query("q") String query,Callback<SearchByPhraseVo> callback);
+
+    @GET("/recipes")
+    void searchCourse(@Query("_app_id") String appId, @Query("_app_key") String appKey, @Query("allowedCourse[]") String course, Callback<SearchByPhraseVo> callback);
 }
