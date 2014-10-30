@@ -2,7 +2,6 @@ package edu.uni.cs.syntaxdesigns.Adapters;
 
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
-import org.w3c.dom.Text;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,5 +56,10 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
         viewHolder.timeToCook.setText(" " + Integer.toString(results.totalTimeInSeconds / 60) + " ");
 
         return convertView;
+    }
+
+    @Override
+    public PhraseResults getItem(int position) {
+        return mResults.get(position);
     }
 }

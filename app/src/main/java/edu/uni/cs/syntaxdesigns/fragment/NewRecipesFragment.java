@@ -13,6 +13,7 @@ import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
+import edu.uni.cs.syntaxdesigns.fragment.dialog.RecipeDialogFragment;
 import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
@@ -27,6 +28,8 @@ public class NewRecipesFragment extends FilteringFragment {
     private NewRecipesFilterFragment mFilterFragment;
     private ListView mListView;
     private SearchRecipesAdapter mAdapter;
+
+    private static final String RECIPE_DIALOG = "newRecipes.recipeDialog";
 
     @Inject ImageUtil mImageUtil;
     @Inject YummlyApi mYummlyApi;
@@ -51,14 +54,14 @@ public class NewRecipesFragment extends FilteringFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_new_recipes, container, false);
 
-        mListView = (ListView) rootView.findViewById(R.id.test_list_view);
+        mListView = (ListView) rootView.findViewById(R.id.new_recipe_list_view);
 
         initializeListView();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO - start a dialog
+                RecipeDialogFragment.newInstance(mAdapter.getItem(position)).show(getFragmentManager(), RECIPE_DIALOG);
             }
         });
 
@@ -66,23 +69,26 @@ public class NewRecipesFragment extends FilteringFragment {
     }
 
     private void initializeListView() {
-        String mainDishQuery = "course^course-Main Dishes";
-        mYummlyApi.searchCourse(YummlyUtil.getApplicationId(getActivity()), YummlyUtil.getApplicationKey(getActivity()), mainDishQuery,new Callback<SearchByPhraseVo>() {
-            @Override
-            public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
-                initializeListViewAdapter(searchByPhraseVo);
-            }
+        String popularSearch = "popular";
+        mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()),
+                                  YummlyUtil.getApplicationKey(getActivity()),
+                                  popularSearch,
+                                  new Callback<SearchByPhraseVo>() {
+                                      @Override
+                                      public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
+                                          initializeListViewAdapter(searchByPhraseVo);
+                                      }
 
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
-                error.printStackTrace();
-            }
-        });
+                                      @Override
+                                      public void failure(RetrofitError error) {
+                                          Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
+                                          error.printStackTrace();
+                                      }
+                                  });
     }
 
     private void initializeListViewAdapter(SearchByPhraseVo searchByPhraseResults) {
-        SearchRecipesAdapter mAdapter = new SearchRecipesAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
+        mAdapter = new SearchRecipesAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
         mListView.setAdapter(mAdapter);
     }
 

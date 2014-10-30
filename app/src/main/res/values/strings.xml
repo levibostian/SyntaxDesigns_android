@@ -15,5 +15,6 @@
     <string name="time">Time: </string>
     <string name="minutes"> Mins.</string>
     <string name="rating">Rating:</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
