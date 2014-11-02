@@ -5,6 +5,7 @@ import dagger.ObjectGraph;
 import edu.uni.cs.syntaxdesigns.module.DatabaseModule;
 import edu.uni.cs.syntaxdesigns.module.FragmentModule;
 import edu.uni.cs.syntaxdesigns.module.UtilModule;
+import edu.uni.cs.syntaxdesigns.module.ViewModule;
 import edu.uni.cs.syntaxdesigns.module.YummlyModule;
 
 import java.util.Arrays;
@@ -26,7 +27,8 @@ public class SyntaxDesignsApplication extends Application {
             new UtilModule(this),
             new FragmentModule(),
             new YummlyModule(this),
-            new DatabaseModule(this)
+            new DatabaseModule(this),
+            new ViewModule()
         );
     }
 
