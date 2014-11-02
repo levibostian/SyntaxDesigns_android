@@ -9,9 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.fragment.FilterDrawerFragment;
 import edu.uni.cs.syntaxdesigns.fragment.FilteringFragment;
@@ -53,6 +55,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
 
                 ((FilteringFragment) mSectionsPagerAdapter.getItem(position)).setFilterFragmentListener(MainActivity.this);
+                invalidateOptionsMenu();
             }
         });
 
@@ -71,6 +74,48 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(!mFilterDrawerFragment.isDrawerOpen()) {
+
+            switch (getActionBar().getSelectedNavigationIndex()) {
+                case 0:
+                    addNewRecipeSearchToMenu(menu);
+                    return true;
+                case 1:
+                    menu.findItem(R.id.search).setVisible(false);
+                    return true;
+                case 2:
+                    menu.findItem(R.id.search).setVisible(false);
+                    return true;
+                default:
+
+
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void addNewRecipeSearchToMenu(Menu menu) {
+        menu.findItem(R.id.search).setVisible(true);
+
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String search) {
+                hideSoftKeyboard();
+                mSectionsPagerAdapter.mNewRecipesFragment.startSearchByPhrase(search);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -154,6 +199,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     return getString(R.string.saved_recipes).toUpperCase(l);
             }
             return null;
+        }
+    }
+
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
 

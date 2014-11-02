@@ -16,5 +16,8 @@
     <string name="minutes"> Mins.</string>
     <string name="rating">Rating:</string>
     <string name="cancel">Cancel</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search for recipes</string>
+
 
 </resources>
