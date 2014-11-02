@@ -25,6 +25,8 @@ import javax.inject.Inject;
 
 public class NewRecipesFragment extends FilteringFragment {
 
+    private static final String DEFAULT_NEW_RECIPES_SEARCH = "popular";
+
     private NewRecipesFilterFragment mFilterFragment;
     private ListView mListView;
     private SearchRecipesAdapter mAdapter;
@@ -69,10 +71,9 @@ public class NewRecipesFragment extends FilteringFragment {
     }
 
     private void initializeListView() {
-        String popularSearch = "popular";
         mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()),
                                   YummlyUtil.getApplicationKey(getActivity()),
-                                  popularSearch,
+                                  DEFAULT_NEW_RECIPES_SEARCH,
                                   new Callback<SearchByPhraseVo>() {
                                       @Override
                                       public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
@@ -82,7 +83,6 @@ public class NewRecipesFragment extends FilteringFragment {
                                       @Override
                                       public void failure(RetrofitError error) {
                                           Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
-                                          error.printStackTrace();
                                       }
                                   });
     }
