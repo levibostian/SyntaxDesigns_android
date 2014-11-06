@@ -26,6 +26,10 @@ import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FilteringFragment.FilterFragmentListener {
 
+    private static final int NEW_RECIPE_FRAGMENT = 0;
+    private static final int GROCERY_LIST_FRAGMENT = 1;
+    private static final int SAVED_RECIPES = 2;
+
     private FilterDrawerFragment mFilterDrawerFragment;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -81,17 +85,17 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         if(!mFilterDrawerFragment.isDrawerOpen()) {
 
             switch (getActionBar().getSelectedNavigationIndex()) {
-                case 0:
+                case NEW_RECIPE_FRAGMENT:
                     addNewRecipeSearchToMenu(menu);
                     return true;
-                case 1:
+                case GROCERY_LIST_FRAGMENT:
                     menu.findItem(R.id.search).setVisible(false);
                     return true;
-                case 2:
+                case SAVED_RECIPES:
                     menu.findItem(R.id.search).setVisible(false);
                     return true;
                 default:
-
+                    return false;
 
             }
         }
@@ -170,11 +174,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         @Override
         public Fragment getItem(int position) {
             switch(position) {
-                case 0:
+                case NEW_RECIPE_FRAGMENT:
                     return mNewRecipesFragment;
-                case 1:
+                case GROCERY_LIST_FRAGMENT:
                     return mGroceryListFragment;
-                case 2:
+                case SAVED_RECIPES:
                     return mSavedRecipesFragment;
                 default:
                     return mNewRecipesFragment;
@@ -191,11 +195,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
-                case 0:
+                case NEW_RECIPE_FRAGMENT:
                     return getString(R.string.find_recipes).toUpperCase(l);
-                case 1:
+                case GROCERY_LIST_FRAGMENT:
                     return getString(R.string.grocery_list).toUpperCase(l);
-                case 2:
+                case SAVED_RECIPES:
                     return getString(R.string.saved_recipes).toUpperCase(l);
             }
             return null;
