@@ -66,6 +66,6 @@ public class NewRecipeView extends LinearLayout {
             mIngredientsDao.insertIngredient(ingredient, false, recipeId);
         }
 
-        Toast.makeText(mContext, "Recipe has been saved", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "Recipe and ingredients have been saved", Toast.LENGTH_SHORT).show();
     }
 }
