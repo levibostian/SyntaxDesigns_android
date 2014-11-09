@@ -11,6 +11,7 @@ import android.widget.EditText;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.util.FilterSearchUtil;
+import retrofit.mime.TypedString;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -97,10 +98,46 @@ public class NewRecipesFilterFragment extends Fragment {
             }
         });
 
+        mMainDishCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mMainDishCheckbox.isChecked()) {
+                    mFilterSearchUtil.withCourse(getResources().getString(R.string.main_dish));
+                    updateNewRecipeFragment();
+                } else {
+                    mFilterSearchUtil.removeCourse(getResources().getString(R.string.main_dish));
+                    updateNewRecipeFragment();
+                }
+            }
+        });
+
+        mLunchAndSnackCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mLunchAndSnackCheckbox.isChecked()) {
+                    mFilterSearchUtil.withCourse(getResources().getString(R.string.lunch_and_snack));
+                    updateNewRecipeFragment();
+                } else {
+                    mFilterSearchUtil.removeCourse(getResources().getString(R.string.lunch_and_snack));
+                    updateNewRecipeFragment();
+                }
+            }
+        });
+
 
         mClearFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mWithIngredients.setText("");
+                mWithoutIngredients.setText("");
+                mTime.setText("");
+                mMainDishCheckbox.setChecked(false);
+                mLunchAndSnackCheckbox.setChecked(false);
+                mBreakfastAndBrunchCheckbox.setChecked(false);
+                mAppetizers.setChecked(false);
+                mDesserts.setChecked(false);
+                mSideDishes.setChecked(false);
+                mSalad.setChecked(false);
                 mFilterSearchUtil.clearFilters();
                 updateNewRecipeFragment();
             }

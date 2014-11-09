@@ -21,6 +21,7 @@ import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedString;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     public void updateNewRecipeSearch(ArrayList<String> withIngredients, ArrayList<String> withoutIngredients, ArrayList<String> withCourses, String withTime) {
         mYummlyApi.searchWithFilter(YummlyUtil.getApplicationId(getActivity()),
                                     YummlyUtil.getApplicationKey(getActivity()),
-                                    mSearchPhrase.matches(DEFAULT_NEW_RECIPES_SEARCH) ? null : mSearchPhrase,
+                                    mSearchPhrase.matches(DEFAULT_NEW_RECIPES_SEARCH) ? DEFAULT_NEW_RECIPES_SEARCH : mSearchPhrase,
                                     withIngredients,
                                     withoutIngredients,
                                     withCourses,

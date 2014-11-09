@@ -57,10 +57,15 @@ public class FilterSearchUtil {
         return mTime;
     }
 
+    public void removeCourse(String course) {
+        mWithCourse.remove(mWithCourse.indexOf(mResources.getString(R.string.course_header) + course));
+    }
+
     public void clearFilters() {
         mWithIngredients.clear();
         mWithoutIngredients.clear();
         mWithCourse.clear();
+        mTime = null;
     }
 
     public String getTimeInSeconds(String time) {

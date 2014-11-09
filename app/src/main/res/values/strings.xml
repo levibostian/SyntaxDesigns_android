@@ -34,10 +34,6 @@
 
     <!--YummlyFilterHeaderStrings-->
     <string name="course_header">course^course-</string>
-    <string name="filter_main_dishes">Main+Dishes</string>
-    <string name="filter_side_dishes">Side+Dishes</string>
-    <string name="filter_lunch_and_snacks">Lunch+and+Snacks</string>
-    <string name="filter_breakfast_and_brunch">Breakfast+and+Brunch</string>
 
 
 
