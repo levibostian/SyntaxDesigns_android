@@ -18,6 +18,6 @@
     <string name="cancel">Cancel</string>
     <string name="search">Search</string>
     <string name="search_hint">Search for recipes</string>
-
+    <string name="save_recipe">Save Recipe</string>
 
 </resources>
