@@ -2,7 +2,11 @@ package edu.uni.cs.syntaxdesigns.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -50,6 +54,23 @@ public class NewRecipesFragment extends FilteringFragment {
         SyntaxDesignsApplication.inject(this);
 
         mFilterFragment = NewRecipesFilterFragment.newInstance();
+    }
+
+    public void startSearchByPhrase(String searchPhrase) {
+        mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()),
+                                  YummlyUtil.getApplicationKey(getActivity()),
+                                  searchPhrase,
+                                  new Callback<SearchByPhraseVo>() {
+                                      @Override
+                                      public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
+                                          initializeListViewAdapter(searchByPhraseVo);
+                                      }
+
+                                      @Override
+                                      public void failure(RetrofitError error) {
+                                          Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
+                                      }
+                                  });
     }
 
     @Override

@@ -9,9 +9,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.fragment.FilterDrawerFragment;
 import edu.uni.cs.syntaxdesigns.fragment.FilteringFragment;
@@ -23,6 +25,10 @@ import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
 import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FilteringFragment.FilterFragmentListener {
+
+    private static final int NEW_RECIPE_FRAGMENT = 0;
+    private static final int GROCERY_LIST_FRAGMENT = 1;
+    private static final int SAVED_RECIPES = 2;
 
     private FilterDrawerFragment mFilterDrawerFragment;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -53,6 +59,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 mDrawerLayout.closeDrawer(Gravity.RIGHT);
 
                 ((FilteringFragment) mSectionsPagerAdapter.getItem(position)).setFilterFragmentListener(MainActivity.this);
+                invalidateOptionsMenu();
             }
         });
 
@@ -71,6 +78,48 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(!mFilterDrawerFragment.isDrawerOpen()) {
+
+            switch (getActionBar().getSelectedNavigationIndex()) {
+                case NEW_RECIPE_FRAGMENT:
+                    addNewRecipeSearchToMenu(menu);
+                    return true;
+                case GROCERY_LIST_FRAGMENT:
+                    menu.findItem(R.id.search).setVisible(false);
+                    return true;
+                case SAVED_RECIPES:
+                    menu.findItem(R.id.search).setVisible(false);
+                    return true;
+                default:
+                    return false;
+
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void addNewRecipeSearchToMenu(Menu menu) {
+        menu.findItem(R.id.search).setVisible(true);
+
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String search) {
+                hideSoftKeyboard();
+                mSectionsPagerAdapter.mNewRecipesFragment.startSearchByPhrase(search);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -125,11 +174,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         @Override
         public Fragment getItem(int position) {
             switch(position) {
-                case 0:
+                case NEW_RECIPE_FRAGMENT:
                     return mNewRecipesFragment;
-                case 1:
+                case GROCERY_LIST_FRAGMENT:
                     return mGroceryListFragment;
-                case 2:
+                case SAVED_RECIPES:
                     return mSavedRecipesFragment;
                 default:
                     return mNewRecipesFragment;
@@ -146,14 +195,21 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
-                case 0:
+                case NEW_RECIPE_FRAGMENT:
                     return getString(R.string.find_recipes).toUpperCase(l);
-                case 1:
+                case GROCERY_LIST_FRAGMENT:
                     return getString(R.string.grocery_list).toUpperCase(l);
-                case 2:
+                case SAVED_RECIPES:
                     return getString(R.string.saved_recipes).toUpperCase(l);
             }
             return null;
+        }
+    }
+
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
 
