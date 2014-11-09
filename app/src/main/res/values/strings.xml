@@ -13,11 +13,32 @@
     <string name="filter_results">Filter results</string>
     <string name="ingredients">Ingredients: </string>
     <string name="time">Time: </string>
-    <string name="minutes"> Mins.</string>
     <string name="rating">Rating:</string>
     <string name="cancel">Cancel</string>
     <string name="search">Search</string>
     <string name="search_hint">Search for recipes</string>
     <string name="save_recipe">Save Recipe</string>
+    <string name="with_ingredient">With Ingredient</string>
+    <string name="without_ingredient">Without Ingredient</string>
+    <string name="add">+Add</string>
+    <string name="main_dish">Main Dish</string>
+    <string name="lunch_and_snack">Lunch and Snack</string>
+    <string name="breakfast_and_brunch">Breakfast and Brunch</string>
+    <string name="appetizers">Appetizers</string>
+    <string name="desserts">Desserts</string>
+    <string name="side_dishes">Side Dishes</string>
+    <string name="salad">Salad</string>
+    <string name="clear_filters">Clear Filters</string>
+    <string name="minutes">Minutes</string>
+    <string name="time_in_minutes">Time in Minutes</string>
+
+    <!--YummlyFilterHeaderStrings-->
+    <string name="course_header">course^course-</string>
+    <string name="filter_main_dishes">Main+Dishes</string>
+    <string name="filter_side_dishes">Side+Dishes</string>
+    <string name="filter_lunch_and_snacks">Lunch+and+Snacks</string>
+    <string name="filter_breakfast_and_brunch">Breakfast+and+Brunch</string>
+
+
 
 </resources>
