@@ -12,10 +12,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -24,6 +27,7 @@ public class NewRecipeView extends LinearLayout {
     private PhraseResults mResults;
 
     private TextView mRecipeName;
+    private ImageView mRecipeImage;
     private Button mSaveRecipe;
     private Context mContext;
     private TextView mRating;
@@ -63,6 +67,12 @@ public class NewRecipeView extends LinearLayout {
         mRating = (TextView) findViewById(R.id.rating_by_stars);
         mViewDirections = (Button) findViewById(R.id.view_directions);
         mSaveRecipe = (Button) findViewById(R.id.save_recipe);
+        mRecipeImage = (ImageView) findViewById(R.id.recipe_image);
+
+        Picasso.with(context).load(mResults.smallImageUrls.get(0))
+               .fit()
+               .centerCrop()
+               .into(mRecipeImage);
 
         setTextViews();
 

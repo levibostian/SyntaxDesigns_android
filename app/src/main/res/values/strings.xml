@@ -22,5 +22,6 @@
     <string name="select_ingredients">Select ingredients you currently have:</string>
     <string name="view_directions">View Directions</string>
     <string name="stars">Stars</string>
+    <string name="recipe_image">Recipe Image</string>
 
 </resources>
