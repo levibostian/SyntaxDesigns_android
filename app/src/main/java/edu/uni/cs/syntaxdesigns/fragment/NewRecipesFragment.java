@@ -64,6 +64,8 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     }
 
     public void startSearchByPhrase(String searchPhrase) {
+        initializeEmptyView(mResources.getString(R.string.loading), View.VISIBLE);
+
         mSearchPhrase = searchPhrase;
         mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()),
                                   YummlyUtil.getApplicationKey(getActivity()),
@@ -76,7 +78,15 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
 
                                       @Override
                                       public void failure(RetrofitError error) {
-                                          Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
+                                          initializeEmptyView(mResources.getString(R.string.yummly_error), View.INVISIBLE);
+                                          mRetry.setVisibility(View.VISIBLE);
+                                          mRetry.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  mRetry.setVisibility(View.INVISIBLE);
+                                                  startSearchByPhrase(mSearchPhrase);
+                                              }
+                                          });
                                       }
                                   });
     }
@@ -134,6 +144,9 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     private void initializeListViewAdapter(SearchByPhraseVo searchByPhraseResults) {
         mAdapter = new SearchRecipesAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
         mListView.setAdapter(mAdapter);
+        mListView.setEmptyView(mEmptyView);
+
+        mEmptyView.setText(mResources.getString(R.string.no_results), View.INVISIBLE);
     }
 
     @Override
@@ -142,7 +155,8 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     }
 
     @Override
-    public void updateNewRecipeSearch(ArrayList<String> withIngredients, ArrayList<String> withoutIngredients, ArrayList<String> withCourses, String withTime) {
+    public void updateNewRecipeSearch(final ArrayList<String> withIngredients, final ArrayList<String> withoutIngredients, final ArrayList<String> withCourses, final String withTime) {
+        initializeEmptyView(mResources.getString(R.string.loading), View.VISIBLE);
         mYummlyApi.searchWithFilter(YummlyUtil.getApplicationId(getActivity()),
                                     YummlyUtil.getApplicationKey(getActivity()),
                                     mSearchPhrase.matches(DEFAULT_NEW_RECIPES_SEARCH) ? DEFAULT_NEW_RECIPES_SEARCH : mSearchPhrase,
@@ -158,7 +172,6 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
 
                                         @Override
                                         public void failure(RetrofitError error) {
-                                            Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
                                         }
                                     });
     }
