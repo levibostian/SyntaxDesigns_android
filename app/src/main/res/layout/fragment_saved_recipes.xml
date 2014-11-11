@@ -10,13 +10,13 @@
     tools:context=".activity.MainActivity">
 
     <EditText
-        android:id="@+id/recipe_name"
+        android:id="@+id/recipe_name_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Recipe name"/>
 
     <EditText
-        android:id="@+id/ingredient_name"
+        android:id="@+id/ingredient_name_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Ingredient name"/>

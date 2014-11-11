@@ -10,12 +10,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.squareup.otto.Bus;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
 import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
+import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
 import edu.uni.cs.syntaxdesigns.fragment.filter.SavedRecipesFilterFragment;
 
 import javax.inject.Inject;
@@ -38,6 +40,7 @@ public class SavedRecipesFragment extends FilteringFragment {
 
     @Inject RecipeDao mRecipeDao;
     @Inject IngredientsDao mIngredientsDao;
+    @Inject Bus mBus;
 
     public static SavedRecipesFragment newInstance() {
         SavedRecipesFragment fragment = new SavedRecipesFragment();
@@ -59,8 +62,8 @@ public class SavedRecipesFragment extends FilteringFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_saved_recipes, container, false);
 
-        mRecipeName = (EditText) rootView.findViewById(R.id.recipe_name);
-        mIngredientName = (EditText) rootView.findViewById(R.id.ingredient_name);
+        mRecipeName = (EditText) rootView.findViewById(R.id.recipe_name_edittext);
+        mIngredientName = (EditText) rootView.findViewById(R.id.ingredient_name_edittext);
         mHaveIngredient = (CheckBox) rootView.findViewById(R.id.have_ingredient);
         mFavoriteRecipe = (CheckBox) rootView.findViewById(R.id.favorite_recipe);
         mAddDataButton = (Button) rootView.findViewById(R.id.add_data_button);
@@ -98,6 +101,7 @@ public class SavedRecipesFragment extends FilteringFragment {
         mIngredientsDao.insertIngredient(String.valueOf(mIngredientName.getText()), mHaveIngredient.isChecked(), recipeRowId);
         mRecipeDao.favoriteRecipe(recipeRowId, mFavoriteRecipe.isChecked());
 
+        mBus.post(new DatabaseUpdateEvent());
         Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT).show();
     }
 
