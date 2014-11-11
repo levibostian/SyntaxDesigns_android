@@ -8,15 +8,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridView;
+import edu.uni.cs.syntaxdesigns.Adapters.IngredientsGridAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.util.FilterSearchUtil;
-import retrofit.mime.TypedString;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.List;
 
-public class NewRecipesFilterFragment extends Fragment {
+public class NewRecipesFilterFragment extends Fragment implements IngredientsGridAdapter.IngredientsGridListener {
 
     private EditText mWithIngredients;
     private EditText mWithoutIngredients;
@@ -32,6 +34,8 @@ public class NewRecipesFilterFragment extends Fragment {
     private CheckBox mSideDishes;
     private CheckBox mSalad;
     private Button mClearFilters;
+    private GridView mWithIngredientsList;
+    private IngredientsGridAdapter mWithIngredientsAdapter;
 
     private Callbacks mCallback;
 
@@ -61,6 +65,7 @@ public class NewRecipesFilterFragment extends Fragment {
         mSalad = (CheckBox) view.findViewById(R.id.salad);
         mClearFilters = (Button) view.findViewById(R.id.clear_filters);
         mAddTime = (Button) view.findViewById(R.id.add_time);
+        mWithIngredientsList = (GridView) view.findViewById(R.id.with_ingredients_list);
 
         SyntaxDesignsApplication.inject(this);
 
@@ -77,8 +82,19 @@ public class NewRecipesFilterFragment extends Fragment {
         mAddWithIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFilterSearchUtil.withIngredient(mWithIngredients.getText().toString().toLowerCase());
-                updateNewRecipeFragment();
+                if (!mWithIngredients.getText().toString().matches("")) {
+                    mFilterSearchUtil.withIngredient(mWithIngredients.getText().toString().toLowerCase());
+
+                    if (mWithIngredientsAdapter != null) {
+                        mWithIngredientsAdapter.notifyDataSetChanged();
+                    } else {
+                        initializeWithIngredientsGrid(mFilterSearchUtil.getWithIngredients());
+                    }
+
+                    mWithIngredients.setText("");
+
+                    updateNewRecipeFragment();
+                }
             }
         });
 
@@ -139,13 +155,32 @@ public class NewRecipesFilterFragment extends Fragment {
                 mSideDishes.setChecked(false);
                 mSalad.setChecked(false);
                 mFilterSearchUtil.clearFilters();
+                mWithIngredientsAdapter.notifyDataSetChanged();
                 updateNewRecipeFragment();
             }
         });
     }
 
+    private void initializeWithIngredientsGrid(List<String> ingredient) {
+        mWithIngredientsAdapter = new IngredientsGridAdapter(getActivity(), ingredient, true);
+        mWithIngredientsAdapter.setCallbacks(this);
+
+        mWithIngredientsList.setAdapter(mWithIngredientsAdapter);
+    }
+
     private void updateNewRecipeFragment() {
         mCallback.updateNewRecipeSearch(mFilterSearchUtil.getWithIngredients(), mFilterSearchUtil.getWithoutIngredients(),mFilterSearchUtil.getWithCourse(), mFilterSearchUtil.getTime());
+    }
+
+    @Override
+    public void removeWithIngredientFromFilterUtil(String ingredient) {
+        mFilterSearchUtil.removeWithIngredient(ingredient);
+        updateNewRecipeFragment();
+    }
+
+    @Override
+    public void removeWithoutIngredientFromtFilterUtil(String ingredient) {
+        mFilterSearchUtil.removeWithoutIngredient(ingredient);
     }
 
     public interface Callbacks {

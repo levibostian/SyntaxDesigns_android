@@ -57,6 +57,16 @@ public class FilterSearchUtil {
         return mTime;
     }
 
+    public void removeWithIngredient(String ingredient) {
+        mWithIngredients.remove(mWithIngredients.indexOf(ingredient));
+
+    }
+
+    public void removeWithoutIngredient(String ingredient) {
+        mWithoutIngredients.remove(mWithoutIngredients.indexOf(ingredient));
+
+    }
+
     public void removeCourse(String course) {
         mWithCourse.remove(mWithCourse.indexOf(mResources.getString(R.string.course_header) + course));
     }
