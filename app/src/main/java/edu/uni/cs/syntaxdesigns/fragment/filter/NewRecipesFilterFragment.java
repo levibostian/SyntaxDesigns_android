@@ -28,13 +28,6 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
     private Button mAddWithoutIngredient;
     private EditText mTime;
     private Button mAddTime;
-    private CheckBox mMainDishCheckbox;
-    private CheckBox mLunchAndSnackCheckbox;
-    private CheckBox mBreakfastAndBrunchCheckbox;
-    private CheckBox mAppetizers;
-    private CheckBox mDesserts;
-    private CheckBox mSideDishes;
-    private CheckBox mSalad;
     private Button mClearFilters;
     private GridView mWithIngredientsList;
     private GridView mWithoutIngredientsList;
@@ -60,13 +53,6 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
         mAddWithIngredient = (Button) view.findViewById(R.id.with_ingredient_button);
         mAddWithoutIngredient = (Button) view.findViewById(R.id.without_ingredient_button);
         mTime = (EditText) view.findViewById(R.id.time_in_minutes);
-        mMainDishCheckbox = (CheckBox) view.findViewById(R.id.main_dish);
-        mLunchAndSnackCheckbox = (CheckBox) view.findViewById(R.id.lunch_and_snack);
-        mBreakfastAndBrunchCheckbox = (CheckBox) view.findViewById(R.id.breakfast_and_brunch);
-        mAppetizers = (CheckBox) view.findViewById(R.id.appetizers);
-        mDesserts = (CheckBox) view.findViewById(R.id.desserts);
-        mSideDishes = (CheckBox) view.findViewById(R.id.side_dishes);
-        mSalad = (CheckBox) view.findViewById(R.id.salad);
         mClearFilters = (Button) view.findViewById(R.id.clear_filters);
         mAddTime = (Button) view.findViewById(R.id.add_time);
         mWithIngredientsList = (GridView) view.findViewById(R.id.with_ingredients_list);
@@ -130,46 +116,12 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
             }
         });
 
-        mMainDishCheckbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mMainDishCheckbox.isChecked()) {
-                    mFilterSearchUtil.withCourse(getResources().getString(R.string.main_dish));
-                    updateNewRecipeFragment();
-                } else {
-                    mFilterSearchUtil.removeCourse(getResources().getString(R.string.main_dish));
-                    updateNewRecipeFragment();
-                }
-            }
-        });
-
-        mLunchAndSnackCheckbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mLunchAndSnackCheckbox.isChecked()) {
-                    mFilterSearchUtil.withCourse(getResources().getString(R.string.lunch_and_snack));
-                    updateNewRecipeFragment();
-                } else {
-                    mFilterSearchUtil.removeCourse(getResources().getString(R.string.lunch_and_snack));
-                    updateNewRecipeFragment();
-                }
-            }
-        });
-
-
         mClearFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mWithIngredients.setText(EMPTY_STRING);
                 mWithoutIngredients.setText(EMPTY_STRING);
                 mTime.setText(EMPTY_STRING);
-                mMainDishCheckbox.setChecked(false);
-                mLunchAndSnackCheckbox.setChecked(false);
-                mBreakfastAndBrunchCheckbox.setChecked(false);
-                mAppetizers.setChecked(false);
-                mDesserts.setChecked(false);
-                mSideDishes.setChecked(false);
-                mSalad.setChecked(false);
                 mFilterSearchUtil.clearFilters();
                 mWithIngredientsAdapter.notifyDataSetChanged();
                 updateNewRecipeFragment();
