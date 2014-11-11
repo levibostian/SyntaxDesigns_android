@@ -3,6 +3,7 @@ package edu.uni.cs.syntaxdesigns.Adapters;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,13 @@ import java.util.List;
 public class SearchRecipesAdapter extends BaseArrayAdapter {
 
     private List<PhraseResults> mResults;
+    private Resources mResources;
 
     public SearchRecipesAdapter(Context context, List<PhraseResults> results) {
         super(context, 0, results);
 
         mResults = results;
+        mResources = context.getResources();
 
         mInflater = LayoutInflater.from(context);
     }
@@ -51,7 +54,7 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
         PhraseResults results = mResults.get(position);
 
         viewHolder.recipeName.setText(results.recipeName);
-        viewHolder.rating.setText(" " + Integer.toString(results.rating));
+        viewHolder.rating.setText(" " + Integer.toString(results.rating) + " " + mResources.getString(R.string.stars));
         viewHolder.numberOfIngredients.setText(" " + Integer.toString(results.ingredients.size()));
         viewHolder.timeToCook.setText(" " + Integer.toString(results.totalTimeInSeconds / 60) + " ");
 
