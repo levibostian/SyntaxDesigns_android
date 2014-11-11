@@ -20,6 +20,8 @@ import java.util.List;
 
 public class NewRecipesFilterFragment extends Fragment implements IngredientsGridAdapter.IngredientsGridListener {
 
+    private static final String EMPTY_STRING = "";
+
     private EditText mWithIngredients;
     private EditText mWithoutIngredients;
     private Button mAddWithIngredient;
@@ -35,7 +37,9 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
     private CheckBox mSalad;
     private Button mClearFilters;
     private GridView mWithIngredientsList;
+    private GridView mWithoutIngredientsList;
     private IngredientsGridAdapter mWithIngredientsAdapter;
+    private IngredientsGridAdapter mWithoutIngredientsAdapter;
 
     private Callbacks mCallback;
 
@@ -66,6 +70,7 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
         mClearFilters = (Button) view.findViewById(R.id.clear_filters);
         mAddTime = (Button) view.findViewById(R.id.add_time);
         mWithIngredientsList = (GridView) view.findViewById(R.id.with_ingredients_list);
+        mWithoutIngredientsList = (GridView) view.findViewById(R.id.without_ingredients_list);
 
         SyntaxDesignsApplication.inject(this);
 
@@ -82,7 +87,7 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
         mAddWithIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mWithIngredients.getText().toString().matches("")) {
+                if (!mWithIngredients.getText().toString().matches(EMPTY_STRING)) {
                     mFilterSearchUtil.withIngredient(mWithIngredients.getText().toString().toLowerCase());
 
                     if (mWithIngredientsAdapter != null) {
@@ -91,7 +96,7 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
                         initializeWithIngredientsGrid(mFilterSearchUtil.getWithIngredients());
                     }
 
-                    mWithIngredients.setText("");
+                    mWithIngredients.setText(EMPTY_STRING);
 
                     updateNewRecipeFragment();
                 }
@@ -101,8 +106,19 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
         mAddWithoutIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFilterSearchUtil.withoutIngredient(mWithoutIngredients.getText().toString());
-                updateNewRecipeFragment();
+                if(!mWithoutIngredients.getText().toString().matches(EMPTY_STRING)) {
+                    mFilterSearchUtil.withoutIngredient(mWithoutIngredients.getText().toString().toLowerCase());
+
+                    if(mWithoutIngredientsAdapter != null) {
+                        mWithoutIngredientsAdapter.notifyDataSetChanged();
+                    } else {
+                        initializeWithoutIngredientsGrid(mFilterSearchUtil.getWithoutIngredients());
+                    }
+
+                    mWithoutIngredients.setText(EMPTY_STRING);
+
+                    updateNewRecipeFragment();
+                }
             }
         });
 
@@ -144,9 +160,9 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
         mClearFilters.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mWithIngredients.setText("");
-                mWithoutIngredients.setText("");
-                mTime.setText("");
+                mWithIngredients.setText(EMPTY_STRING);
+                mWithoutIngredients.setText(EMPTY_STRING);
+                mTime.setText(EMPTY_STRING);
                 mMainDishCheckbox.setChecked(false);
                 mLunchAndSnackCheckbox.setChecked(false);
                 mBreakfastAndBrunchCheckbox.setChecked(false);
@@ -161,11 +177,18 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
         });
     }
 
-    private void initializeWithIngredientsGrid(List<String> ingredient) {
-        mWithIngredientsAdapter = new IngredientsGridAdapter(getActivity(), ingredient, true);
+    private void initializeWithIngredientsGrid(List<String> ingredients) {
+        mWithIngredientsAdapter = new IngredientsGridAdapter(getActivity(), ingredients, true);
         mWithIngredientsAdapter.setCallbacks(this);
 
         mWithIngredientsList.setAdapter(mWithIngredientsAdapter);
+    }
+
+    private void initializeWithoutIngredientsGrid(List<String> ingredients) {
+        mWithoutIngredientsAdapter = new IngredientsGridAdapter(getActivity(), ingredients, false);
+        mWithoutIngredientsAdapter.setCallbacks(this);
+
+        mWithoutIngredientsList.setAdapter(mWithoutIngredientsAdapter);
     }
 
     private void updateNewRecipeFragment() {
