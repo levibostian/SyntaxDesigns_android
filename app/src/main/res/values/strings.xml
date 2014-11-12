@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SyntaxDesigns</string>
+    <string name="app_name">Recipe Box</string>
     <string name="find_recipes">Find Recipes</string>
     <string name="grocery_list">Grocery List</string>
     <string name="saved_recipes">Saved Recipes</string>
@@ -13,7 +13,6 @@
     <string name="filter_results">Filter results</string>
     <string name="ingredients">Ingredients: </string>
     <string name="time">Time: </string>
-    <string name="minutes"> Mins.</string>
     <string name="rating">Rating:</string>
     <string name="cancel">Cancel</string>
     <string name="search">Search</string>
@@ -23,5 +22,28 @@
     <string name="view_directions">View Directions</string>
     <string name="stars">Stars</string>
     <string name="recipe_image">Recipe Image</string>
+    <string name="with_ingredient">With Ingredient</string>
+    <string name="without_ingredient">Without Ingredient</string>
+    <string name="add">+Add</string>
+    <string name="main_dish">Main Dish</string>
+    <string name="lunch_and_snack">Lunch and Snack</string>
+    <string name="breakfast_and_brunch">Breakfast and Brunch</string>
+    <string name="appetizers">Appetizers</string>
+    <string name="desserts">Desserts</string>
+    <string name="side_dishes">Side Dishes</string>
+    <string name="salad">Salad</string>
+    <string name="clear_filters">Clear Filters</string>
+    <string name="minutes">Minutes</string>
+    <string name="time_in_minutes">Time in Minutes</string>
+    <string name="no_results">There were no results for your search.\nTry clearing your filters.</string>
+    <string name="retry">Retry</string>
+    <string name="loading">Loading....</string>
+
+    <!--YummlyFilterHeaderStrings-->
+    <string name="course_header">course^course-</string>
+
+
+    <string name="grocery_list_filter_message">Which recipes are you\nshopping for?</string>
+>>>>>>> empty-view
 
 </resources>

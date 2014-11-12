@@ -1,6 +1,7 @@
 package edu.uni.cs.syntaxdesigns.Adapters;
 
 import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.adapter.BaseArrayAdapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

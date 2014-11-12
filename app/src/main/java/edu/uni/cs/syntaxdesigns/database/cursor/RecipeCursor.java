@@ -26,4 +26,8 @@ public class RecipeCursor extends CursorWrapper {
         return getInt(getColumnIndexOrThrow(RecipeTable.Columns.COLUMN_FAVORITE.name)) == 1;
     }
 
+    public boolean isEnabledInGroceryList() {
+        return getInt(getColumnIndexOrThrow(RecipeTable.Columns.COLUMN_IS_ENABLED_IN_GROCERY_LIST.name)) == 1;
+    }
+
 }

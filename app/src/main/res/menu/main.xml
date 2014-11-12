@@ -11,6 +11,7 @@
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <item android:id="@+id/action_filter"
+        android:icon="@drawable/filter"
         android:title="@string/filter_results"
         app:showAsAction="ifRoom"/>
     <item android:id="@+id/action_settings"

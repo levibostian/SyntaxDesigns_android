@@ -1,7 +1,5 @@
-package edu.uni.cs.syntaxdesigns.Adapters;
+package edu.uni.cs.syntaxdesigns.adapter;
 
-import edu.uni.cs.syntaxdesigns.R;
-import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
@@ -9,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 
 import com.squareup.picasso.Picasso;
 
