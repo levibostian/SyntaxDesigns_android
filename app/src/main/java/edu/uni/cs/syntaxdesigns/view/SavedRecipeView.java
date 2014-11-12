@@ -1,13 +1,12 @@
 package edu.uni.cs.syntaxdesigns.view;
 
-import edu.uni.cs.syntaxdesigns.Adapters.RecipeDialogIngredientsListAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
-import org.w3c.dom.Attr;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,6 +24,7 @@ public class SavedRecipeView extends LinearLayout {
     private TextView mTime;
     private ListView mListView;
     private Button mViewDirections;
+    private SavedRecipeViewListener mListener;
 
     private Resources mResources;
     private Context mContext;
@@ -66,7 +66,17 @@ public class SavedRecipeView extends LinearLayout {
 
         initializeListView();
 
+        mViewDirections.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.startRecipeDetails();
+            }
+        });
 
+    }
+
+    public void setListener(SavedRecipeViewListener listener) {
+        mListener = listener;
     }
 
     private void initializeListView() {
@@ -78,5 +88,9 @@ public class SavedRecipeView extends LinearLayout {
         mRecipeName.setText(mRecipe.name);
         mTime.setText(" " + mRecipe.totalTime);
         mRating.setText(" " + mRecipe.rating + " " + mResources.getString(R.string.stars));
+    }
+
+    public interface SavedRecipeViewListener {
+        void startRecipeDetails();
     }
 }
