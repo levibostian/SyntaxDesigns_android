@@ -6,6 +6,7 @@ import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
+import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import edu.uni.cs.syntaxdesigns.view.HtmlView;
 import edu.uni.cs.syntaxdesigns.view.NewRecipeView;
@@ -20,6 +21,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.Window;
 import android.widget.Toast;
+
+import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
@@ -36,6 +39,7 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
     private Resources mResources;
 
     @Inject YummlyApi mYummlyApi;
+    @Inject Bus mBus;
 
     public static RecipeDialogFragment newInstance(PhraseResults results) {
         Bundle bundle = new Bundle();
@@ -100,7 +104,29 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
     }
 
     @Override
-    public void dismissDialog() {
+    public void updateDatabaseAndCloseDialog() {
         mDialog.dismiss();
+        mBus.post(new DatabaseUpdateEvent());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mBus.register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mBus.unregister(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        mBus.unregister(this);
     }
 }
