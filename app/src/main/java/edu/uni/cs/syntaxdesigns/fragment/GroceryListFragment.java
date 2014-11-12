@@ -5,38 +5,33 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ListView;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.VOs.IngredientVo;
+import edu.uni.cs.syntaxdesigns.adapter.GroceryListAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
 import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
+import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
+import edu.uni.cs.syntaxdesigns.event.GroceryListFilterRecipesChangedEvent;
 import edu.uni.cs.syntaxdesigns.fragment.filter.GroceryListFilterFragment;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 
 public class GroceryListFragment extends FilteringFragment {
 
     private GroceryListFilterFragment mFilterFragment;
-    private EditText mRecipeName;
-    private EditText mIngredientName;
-    private CheckBox mHaveIngredient;
-    private CheckBox mFavoriteRecipe;
-    private Button mAddDataButton;
-    private TextView mRecipeNameRead;
-    private TextView mIngredientNameRead;
-    private TextView mHaveIngredientRead;
-    private TextView mIsFavoriteRead;
-    private Button mReadDataButton;
-    private EditText mRecipeRowId;
 
-    @Inject RecipeDao mRecipeDao;
+    private ListView mGroceryList;
+
     @Inject IngredientsDao mIngredientsDao;
+    @Inject RecipeDao mRecipeDao;
+    @Inject Bus mBus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,64 +50,71 @@ public class GroceryListFragment extends FilteringFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        mBus.register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mBus.unregister(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_grocery_list, container, false);
 
-        mRecipeName = (EditText) rootView.findViewById(R.id.recipe_name);
-        mIngredientName = (EditText) rootView.findViewById(R.id.ingredient_name);
-        mHaveIngredient = (CheckBox) rootView.findViewById(R.id.have_ingredient);
-        mFavoriteRecipe = (CheckBox) rootView.findViewById(R.id.favorite_recipe);
-        mAddDataButton = (Button) rootView.findViewById(R.id.add_data_button);
-        mRecipeNameRead = (TextView) rootView.findViewById(R.id.recipe_name_read);
-        mIngredientNameRead = (TextView) rootView.findViewById(R.id.ingredient_name_read);
-        mHaveIngredientRead = (TextView) rootView.findViewById(R.id.have_ingredient_read);
-        mIsFavoriteRead = (TextView) rootView.findViewById(R.id.is_favorite_read);
-        mReadDataButton = (Button) rootView.findViewById(R.id.read_data_button);
-        mRecipeRowId = (EditText) rootView.findViewById(R.id.recipe_row_id);
-
-        mAddDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addDataToDatabase();
-            }
-        });
-
-        mReadDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mRecipeRowId.getText() != null) {
-                    readDataFromDatabase();
-                } else {
-                    Toast.makeText(getActivity(), "Enter recipe rowId to read", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        mGroceryList = (ListView) rootView.findViewById(R.id.grocery_list_list);
+        populate();
 
         return rootView;
     }
 
-    private void addDataToDatabase() {
-        long recipeRowId = mRecipeDao.insertRecipe(String.valueOf(mRecipeName.getText()), "http:www.yummly.com/" + mRecipeName);
-
-        mIngredientsDao.insertIngredient(String.valueOf(mIngredientName.getText()), mHaveIngredient.isChecked(), recipeRowId);
-        mRecipeDao.favoriteRecipe(recipeRowId, mFavoriteRecipe.isChecked());
-
-        Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT).show();
+    @Subscribe
+    public void onDatabaseUpdate(DatabaseUpdateEvent event) {
+        populate();
     }
 
-    private void readDataFromDatabase() {
-        RecipeCursor recipeCursor = mRecipeDao.readRecipeByRowId(Long.valueOf(String.valueOf(mRecipeRowId.getText())));
-        recipeCursor.moveToFirst();
-        IngredientsCursor ingredientsCursor = mIngredientsDao.readIngredientsForRecipe(recipeCursor.readRowId());
-        ingredientsCursor.moveToFirst();
+    @Subscribe
+    public void onGroceryListFilterUpdate(GroceryListFilterRecipesChangedEvent event) {
+        populate();
+    }
 
-        mRecipeNameRead.setText(recipeCursor.readName());
-        mIngredientNameRead.setText(ingredientsCursor.readName());
-        mHaveIngredientRead.setText(ingredientsCursor.isHaveIt() ? "has it" : "does not have it");
-        mIsFavoriteRead.setText(recipeCursor.isFavorite() ? "is favorite" : "not favorite");
+    public void populate() {
+        ArrayList<IngredientVo> ingredients = new ArrayList<IngredientVo>();
 
-        recipeCursor.close();
-        ingredientsCursor.close();
+        RecipeCursor recipeCursor = mRecipeDao.readRecipes();
+        if (recipeCursor.moveToFirst()) {
+            do {
+                if (recipeCursor.isEnabledInGroceryList()) {
+                    readRecipes(ingredients, recipeCursor.readRowId());
+                }
+            } while (recipeCursor.moveToNext());
+        }
+
+        GroceryListAdapter groceryListAdapter = new GroceryListAdapter(getActivity(), ingredients);
+        mGroceryList.setAdapter(groceryListAdapter);
+    }
+
+    private void readRecipes(ArrayList<IngredientVo> ingredients, long recipeRowId) {
+        IngredientsCursor cursor = mIngredientsDao.readIngredientsForRecipe(recipeRowId);
+
+        if (cursor.moveToFirst()) {
+            do {
+                IngredientVo ingredient = new IngredientVo();
+                ingredient.rowId = cursor.readRowId();
+                ingredient.name = cursor.readName();
+                ingredient.haveIt = cursor.isHaveIt();
+                ingredient.recipeId = cursor.readRecipeId();
+
+                ingredients.add(ingredient);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
     }
 
     @Override

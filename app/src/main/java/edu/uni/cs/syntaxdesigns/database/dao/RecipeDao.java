@@ -28,12 +28,8 @@ public class RecipeDao {
     }
 
     public RecipeCursor readRecipes() {
-        String[] columns = {RecipeTable.Columns._ID,
-                            RecipeTable.Columns.COLUMN_NAME.name,
-                            RecipeTable.Columns.COLUMN_FAVORITE.name};
-
         return new RecipeCursor(mReadableDatabase.query(RecipeTable.TABLE_NAME,
-                                      columns,
+                                      new String[] {"*"},
                                       null,
                                       null,
                                       null,
@@ -42,12 +38,8 @@ public class RecipeDao {
     }
 
     public RecipeCursor readRecipeByRowId(long rowId) {
-        String[] columns = {RecipeTable.Columns._ID,
-                            RecipeTable.Columns.COLUMN_NAME.name,
-                            RecipeTable.Columns.COLUMN_FAVORITE.name};
-
         return new RecipeCursor(mReadableDatabase.query(RecipeTable.TABLE_NAME,
-                                                      columns,
+                                                      new String[] {"*"},
                                                       RecipeTable.Columns._ID + " = ?",
                                                       new String[]{String.valueOf(rowId)},
                                                       null,
@@ -69,6 +61,16 @@ public class RecipeDao {
                                 values,
                                 "_id = ?",
                                 new String[] {String.valueOf(rowId)});
+    }
+
+    public void enabledInGroceryList(long rowId, boolean isEnabled) {
+        ContentValues values = new ContentValues();
+        values.put(RecipeTable.Columns.COLUMN_IS_ENABLED_IN_GROCERY_LIST.name, isEnabled ? 1 : 0);
+
+        mWritableDatabase.update(RecipeTable.TABLE_NAME,
+                                 values,
+                                 "_id = ?",
+                                 new String[]{String.valueOf(rowId)});
     }
 
 }

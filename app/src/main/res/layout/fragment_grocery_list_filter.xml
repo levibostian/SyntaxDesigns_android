@@ -7,9 +7,25 @@
     android:background="@android:color/background_dark">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Grocery list filter"
-        android:textColor="@android:color/white"/>
+        android:text="@string/grocery_list_filter_message"
+        android:textColor="@android:color/white"
+        android:gravity="center_horizontal"
+        android:paddingBottom="8dp"
+        android:textSize="20sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/divider"/>
+
+    <ListView
+        android:id="@+id/grocery_list_filter_recipes_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"/>
 
 </LinearLayout>
