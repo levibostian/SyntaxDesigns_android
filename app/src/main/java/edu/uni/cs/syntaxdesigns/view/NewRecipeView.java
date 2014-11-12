@@ -35,6 +35,7 @@ public class NewRecipeView extends LinearLayout {
     private ListView mListView;
     private Button mViewDirections;
     private RecipeDialogIngredientsListAdapter mAdapter;
+    private DetailsListener mCallback;
 
     private Resources mResources;
 
@@ -81,7 +82,7 @@ public class NewRecipeView extends LinearLayout {
         mViewDirections.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mCallback.startRecipeDetials(mResults.id);
             }
         });
 
@@ -92,6 +93,10 @@ public class NewRecipeView extends LinearLayout {
                 saveRecipe(mResults);
             }
         });
+    }
+
+    public void setCallback(DetailsListener callback) {
+        mCallback = callback;
     }
 
     private void initializeListView() {
@@ -118,5 +123,9 @@ public class NewRecipeView extends LinearLayout {
         }
 
         Toast.makeText(mContext, "Recipe and ingredients have been saved", Toast.LENGTH_SHORT).show();
+    }
+
+    public interface DetailsListener {
+        void startRecipeDetials(String recipeId);
     }
 }
