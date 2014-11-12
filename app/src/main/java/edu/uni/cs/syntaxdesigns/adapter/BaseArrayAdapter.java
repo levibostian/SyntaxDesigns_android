@@ -1,4 +1,4 @@
-package edu.uni.cs.syntaxdesigns.Adapters;
+package edu.uni.cs.syntaxdesigns.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
