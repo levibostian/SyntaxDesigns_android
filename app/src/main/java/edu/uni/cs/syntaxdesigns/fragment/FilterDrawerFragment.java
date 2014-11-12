@@ -14,6 +14,7 @@ public class FilterDrawerFragment extends Fragment {
 
     private DrawerLayout mDrawerLayout;
     private View mFragmentContainerView;
+    private Fragment mCurrentFragment;
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
@@ -29,7 +30,12 @@ public class FilterDrawerFragment extends Fragment {
         setFilterFragment(filterFragment);
     }
 
+    public Fragment getCurrentFilterFragment() {
+        return mCurrentFragment;
+    }
+
     public void setFilterFragment(Fragment filter) {
+        mCurrentFragment = filter;
         setFilter(filter);
     }
 

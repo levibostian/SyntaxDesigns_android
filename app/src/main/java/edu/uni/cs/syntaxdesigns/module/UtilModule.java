@@ -3,6 +3,7 @@ package edu.uni.cs.syntaxdesigns.module;
 import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
+import edu.uni.cs.syntaxdesigns.util.FilterSearchUtil;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
 
 @Module(library = true)
@@ -20,5 +21,10 @@ public class UtilModule {
     @Provides
     ImageUtil provideImageUtil() {
         return new ImageUtil(mContext);
+    }
+
+    @Provides
+    FilterSearchUtil provideFilterSearchUtil() {
+        return new FilterSearchUtil(mContext);
     }
 }

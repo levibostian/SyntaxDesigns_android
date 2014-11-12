@@ -12,6 +12,7 @@ public final class RecipeTable extends DatabaseTable {
         public static final TableColumn COLUMN_NAME = new TableColumn("name", ColumnType.TEXT, true);
         public static final TableColumn COLUMN_YUMMLY_URL = new TableColumn("yummlyUrl", ColumnType.TEXT);
         public static final TableColumn COLUMN_FAVORITE = new TableColumn("favorite", ColumnType.INTEGER, false, "0");
+        public static final TableColumn COLUMN_IS_ENABLED_IN_GROCERY_LIST = new TableColumn("isEnabledInGroceryList", ColumnType.INTEGER, false, "1");
     }
 
     public static final String getCreateQuery() {
@@ -19,7 +20,8 @@ public final class RecipeTable extends DatabaseTable {
                Columns._ID + " INTEGER PRIMARY KEY," +
                Columns.COLUMN_NAME + "," +
                Columns.COLUMN_YUMMLY_URL + "," +
-               Columns.COLUMN_FAVORITE + ")";
+               Columns.COLUMN_FAVORITE + "," +
+               Columns.COLUMN_IS_ENABLED_IN_GROCERY_LIST + ")";
     }
 
     public static final String getDeleteQuery() {
