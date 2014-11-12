@@ -71,6 +71,8 @@ public class NewRecipeView extends LinearLayout {
         mRecipeImage = (ImageView) findViewById(R.id.recipe_image);
 
         Picasso.with(context).load(mResults.smallImageUrls.get(0))
+               .placeholder(R.drawable.ic_launcher)
+               .error(R.drawable.ic_launcher)
                .fit()
                .centerCrop()
                .into(mRecipeImage);
