@@ -1,9 +1,8 @@
 package edu.uni.cs.syntaxdesigns.VOs;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.List;
 
@@ -17,6 +16,7 @@ public class PhraseResults implements Parcelable {
     //public ImageUrlsBySize imageUrlBySize;
     public String sourceDisplayName;
     public List<String> ingredients;
+    public List<String> smallImageUrls;
     public String id;
     public String recipeName;
     public int totalTimeInSeconds;
@@ -33,6 +33,7 @@ public class PhraseResults implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.sourceDisplayName);
         dest.writeList(this.ingredients);
+        dest.writeList(this.smallImageUrls);
         dest.writeString(this.id);
         dest.writeString(this.recipeName);
         dest.writeInt(this.totalTimeInSeconds);
@@ -45,6 +46,7 @@ public class PhraseResults implements Parcelable {
     private PhraseResults(Parcel in) {
         this.sourceDisplayName = in.readString();
         in.readList(this.ingredients, getClass().getClassLoader());
+        in.readList(this.smallImageUrls, getClass().getClassLoader());
         this.id = in.readString();
         this.recipeName = in.readString();
         this.totalTimeInSeconds = in.readInt();
