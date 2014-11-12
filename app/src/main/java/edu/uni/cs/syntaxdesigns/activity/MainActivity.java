@@ -152,6 +152,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
+    public Fragment getFilterFragment() {
+        return mFilterDrawerFragment.getCurrentFilterFragment();
+    }
+
     @Override
     public void setFilterFragment(Fragment filter) {
         mFilterDrawerFragment.setFilterFragment(filter);

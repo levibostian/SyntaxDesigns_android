@@ -6,11 +6,15 @@ import edu.uni.cs.syntaxdesigns.fragment.NewRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.SavedRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.dialog.RecipeDialogFragment;
 import edu.uni.cs.syntaxdesigns.fragment.dialog.SavedRecipeDialogFragment;
+import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
+import edu.uni.cs.syntaxdesigns.fragment.filter.GroceryListFilterFragment;
 
 @Module(injects = {NewRecipesFragment.class,
                    GroceryListFragment.class,
-                   RecipeDialogFragment.class,
                    SavedRecipesFragment.class,
+                   GroceryListFilterFragment.class,
+                   NewRecipesFilterFragment.class,
+                   RecipeDialogFragment.class,
                    SavedRecipeDialogFragment.class}, complete = false)
 public class FragmentModule {
 
