@@ -1,12 +1,14 @@
 package edu.uni.cs.syntaxdesigns.Adapters;
 
-import edu.uni.cs.syntaxdesigns.R;
-import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
+import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 
 import java.util.List;
 
@@ -14,15 +16,19 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
 
     private List<PhraseResults> mResults;
 
+    private Context mContext;
+
     public SearchRecipesAdapter(Context context, List<PhraseResults> results) {
         super(context, 0, results);
 
+        mContext = context;
         mResults = results;
 
         mInflater = LayoutInflater.from(context);
     }
 
     private static class ViewHolder {
+        ImageView recipeImage;
         TextView numberOfIngredients;
         TextView recipeName;
         TextView rating;
@@ -38,6 +44,7 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
 
             viewHolder = new ViewHolder();
 
+            viewHolder.recipeImage = (ImageView) convertView.findViewById(R.id.recipe_image);
             viewHolder.recipeName = (TextView) convertView.findViewById(R.id.recipe_name);
             viewHolder.rating = (TextView) convertView.findViewById(R.id.rating);
             viewHolder.numberOfIngredients = (TextView) convertView.findViewById(R.id.number_of_ingredients);
@@ -50,6 +57,10 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
 
         PhraseResults results = mResults.get(position);
 
+        Picasso.with(mContext).load(results.smallImageUrls.get(0))
+               .placeholder(R.drawable.ic_launcher)
+               .error(R.drawable.ic_launcher)
+               .into(viewHolder.recipeImage);
         viewHolder.recipeName.setText(results.recipeName);
         viewHolder.rating.setText(" " + Integer.toString(results.rating));
         viewHolder.numberOfIngredients.setText(" " + Integer.toString(results.ingredients.size()));
