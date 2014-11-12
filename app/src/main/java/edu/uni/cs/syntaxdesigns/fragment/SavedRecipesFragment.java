@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
@@ -17,6 +18,7 @@ import edu.uni.cs.syntaxdesigns.adapter.SavedRecipesAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
+import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
 import edu.uni.cs.syntaxdesigns.fragment.dialog.SavedRecipeDialogFragment;
 import edu.uni.cs.syntaxdesigns.fragment.filter.SavedRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
@@ -58,6 +60,20 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        mBus.register(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mBus.unregister(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_saved_recipes, container, false);
 
@@ -83,7 +99,7 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SavedRecipeDialogFragment.newInstance(mSavedRecipesAdapter.getItem(position)).show(getActivity().getFragmentManager(), SAVED_RECIPE_DIALOG);
+                SavedRecipeDialogFragment.newInstance(mSavedRecipesAdapter.getItem(position), mSavedRecipes.get(position)).show(getActivity().getFragmentManager(), SAVED_RECIPE_DIALOG);
             }
         });
     }
@@ -128,6 +144,11 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
         }
 
         return recipes;
+    }
+
+    @Subscribe
+    public void onDatabaseUpdatedEvent(DatabaseUpdateEvent event) {
+        populate();
     }
 
 

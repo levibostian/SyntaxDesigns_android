@@ -2,6 +2,7 @@ package edu.uni.cs.syntaxdesigns.view;
 
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
+import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -24,15 +26,18 @@ public class SavedRecipeView extends LinearLayout {
     private TextView mTime;
     private ListView mListView;
     private Button mViewDirections;
+    private SavedRecipeVo mSavedRecipeVo;
     private SavedRecipeViewListener mListener;
+    private CheckBox mFavorite;
 
     private Resources mResources;
     private Context mContext;
 
-    public SavedRecipeView(Context context, RecipeIdVo recipe) {
+    public SavedRecipeView(Context context, RecipeIdVo recipe, SavedRecipeVo savedRecipeVo) {
         super(context);
 
         mRecipe = recipe;
+        mSavedRecipeVo = savedRecipeVo;
         initialize(context);
     }
 
@@ -54,6 +59,7 @@ public class SavedRecipeView extends LinearLayout {
         mRating = (TextView) findViewById(R.id.rating_by_stars);
         mViewDirections = (Button) findViewById(R.id.view_directions);
         mRecipeImage = (ImageView) findViewById(R.id.recipe_image);
+        mFavorite= (CheckBox) findViewById(R.id.dialog_favorite);
 
         Picasso.with(context).load(mRecipe.images.get(0).hostedMediumUrl)
                .placeholder(R.drawable.ic_launcher)
@@ -63,6 +69,16 @@ public class SavedRecipeView extends LinearLayout {
                .into(mRecipeImage);
 
         setTextViews();
+
+        mFavorite.setChecked(mSavedRecipeVo.isFavorite);
+
+        mFavorite.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSavedRecipeVo.isFavorite = mFavorite.isChecked();
+                mListener.updateFavorite(mSavedRecipeVo.rowId, mFavorite.isChecked());
+            }
+        });
 
         initializeListView();
 
@@ -92,5 +108,6 @@ public class SavedRecipeView extends LinearLayout {
 
     public interface SavedRecipeViewListener {
         void startRecipeDetails();
+        void updateFavorite(long id, boolean isFavorite);
     }
 }
