@@ -27,13 +27,14 @@ import retrofit.client.Response;
 import javax.inject.Inject;
 import java.util.ArrayList;
 
-public class SavedRecipesFragment extends FilteringFragment {
+public class SavedRecipesFragment extends FilteringFragment implements SavedRecipesAdapter.SavedRecipesListListener {
 
     private static final String SAVED_RECIPE_DIALOG = "savedRecipeFragment.savedRecipeDialog";
 
     private SavedRecipesFilterFragment mFilterFragment;
     private ListView mListView;
     private SavedRecipesAdapter mSavedRecipesAdapter;
+    private ArrayList<SavedRecipeVo> mSavedRecipes;
 
 
     @Inject RecipeDao mRecipeDao;
@@ -68,13 +69,15 @@ public class SavedRecipesFragment extends FilteringFragment {
     }
 
     private void populate() {
-        ArrayList<SavedRecipeVo> savedRecipes = getRecipes();
-        getRecipesById(savedRecipes);
+        mSavedRecipes = new ArrayList<SavedRecipeVo>();
+        mSavedRecipes = getRecipes();
+        getRecipesById(mSavedRecipes);
 
     }
 
     private void initializeSavedRecipesAdapter(ArrayList<RecipeIdVo> recipes) {
-        mSavedRecipesAdapter = new SavedRecipesAdapter(getActivity(), recipes);
+        mSavedRecipesAdapter = new SavedRecipesAdapter(getActivity(), recipes, mSavedRecipes);
+        mSavedRecipesAdapter.setListener(this);
         mListView.setAdapter(mSavedRecipesAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -131,5 +134,10 @@ public class SavedRecipesFragment extends FilteringFragment {
     @Override
     public Fragment getFilterFragment() {
         return mFilterFragment;
+    }
+
+    @Override
+    public void onRecipeDaoUpdate(int id, boolean isFavorite) {
+        mRecipeDao.favoriteRecipe(id, isFavorite);
     }
 }
