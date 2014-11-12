@@ -17,6 +17,7 @@ import edu.uni.cs.syntaxdesigns.adapter.SavedRecipesAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
+import edu.uni.cs.syntaxdesigns.fragment.dialog.SavedRecipeDialogFragment;
 import edu.uni.cs.syntaxdesigns.fragment.filter.SavedRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import retrofit.Callback;
@@ -27,6 +28,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 
 public class SavedRecipesFragment extends FilteringFragment {
+
+    private static final String SAVED_RECIPE_DIALOG = "savedRecipeFragment.savedRecipeDialog";
 
     private SavedRecipesFilterFragment mFilterFragment;
     private ListView mListView;
@@ -77,7 +80,7 @@ public class SavedRecipesFragment extends FilteringFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                SavedRecipeDialogFragment.newInstance(mSavedRecipesAdapter.getItem(position)).show(getActivity().getFragmentManager(), SAVED_RECIPE_DIALOG);
             }
         });
     }
