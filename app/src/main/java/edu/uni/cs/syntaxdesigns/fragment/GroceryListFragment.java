@@ -13,8 +13,11 @@ import edu.uni.cs.syntaxdesigns.VOs.IngredientVo;
 import edu.uni.cs.syntaxdesigns.adapter.GroceryListAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
+import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
+import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
 import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
+import edu.uni.cs.syntaxdesigns.event.GroceryListFilterRecipesChangedEvent;
 import edu.uni.cs.syntaxdesigns.fragment.filter.GroceryListFilterFragment;
 
 import javax.inject.Inject;
@@ -27,6 +30,7 @@ public class GroceryListFragment extends FilteringFragment {
     private ListView mGroceryList;
 
     @Inject IngredientsDao mIngredientsDao;
+    @Inject RecipeDao mRecipeDao;
     @Inject Bus mBus;
 
     @Override
@@ -35,7 +39,6 @@ public class GroceryListFragment extends FilteringFragment {
 
         SyntaxDesignsApplication.inject(this);
 
-        mBus.register(this);
         mFilterFragment = GroceryListFilterFragment.newInstance();
     }
 
@@ -44,6 +47,13 @@ public class GroceryListFragment extends FilteringFragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mBus.register(this);
     }
 
     @Override
@@ -68,15 +78,29 @@ public class GroceryListFragment extends FilteringFragment {
         populate();
     }
 
+    @Subscribe
+    public void onGroceryListFilterUpdate(GroceryListFilterRecipesChangedEvent event) {
+        populate();
+    }
+
     public void populate() {
-        ArrayList<IngredientVo> ingredients = getIngredients();
+        ArrayList<IngredientVo> ingredients = new ArrayList<IngredientVo>();
+
+        RecipeCursor recipeCursor = mRecipeDao.readRecipes();
+        if (recipeCursor.moveToFirst()) {
+            do {
+                if (recipeCursor.isEnabledInGroceryList()) {
+                    readRecipes(ingredients, recipeCursor.readRowId());
+                }
+            } while (recipeCursor.moveToNext());
+        }
+
         GroceryListAdapter groceryListAdapter = new GroceryListAdapter(getActivity(), ingredients);
         mGroceryList.setAdapter(groceryListAdapter);
     }
 
-    private ArrayList<IngredientVo> getIngredients() {
-        ArrayList<IngredientVo> ingredients = new ArrayList<IngredientVo>();
-        IngredientsCursor cursor = mIngredientsDao.readIngredients();
+    private void readRecipes(ArrayList<IngredientVo> ingredients, long recipeRowId) {
+        IngredientsCursor cursor = mIngredientsDao.readIngredientsForRecipe(recipeRowId);
 
         if (cursor.moveToFirst()) {
             do {
@@ -90,7 +114,7 @@ public class GroceryListFragment extends FilteringFragment {
             } while (cursor.moveToNext());
         }
 
-        return ingredients;
+        cursor.close();
     }
 
     @Override

@@ -4,10 +4,12 @@ import dagger.Module;
 import edu.uni.cs.syntaxdesigns.fragment.GroceryListFragment;
 import edu.uni.cs.syntaxdesigns.fragment.NewRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.SavedRecipesFragment;
+import edu.uni.cs.syntaxdesigns.fragment.filter.GroceryListFilterFragment;
 
 @Module(injects = {NewRecipesFragment.class,
                    GroceryListFragment.class,
-                   SavedRecipesFragment.class}, complete = false)
+                   SavedRecipesFragment.class,
+                   GroceryListFilterFragment.class}, complete = false)
 public class FragmentModule {
 
     public FragmentModule() {
