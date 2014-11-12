@@ -16,7 +16,6 @@ import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
 import edu.uni.cs.syntaxdesigns.fragment.filter.GroceryListFilterFragment;
-import edu.uni.cs.syntaxdesigns.util.LogUtil;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -70,7 +69,6 @@ public class GroceryListFragment extends FilteringFragment {
     }
 
     public void populate() {
-        LogUtil.d("populating");
         ArrayList<IngredientVo> ingredients = getIngredients();
         GroceryListAdapter groceryListAdapter = new GroceryListAdapter(getActivity(), ingredients);
         mGroceryList.setAdapter(groceryListAdapter);
