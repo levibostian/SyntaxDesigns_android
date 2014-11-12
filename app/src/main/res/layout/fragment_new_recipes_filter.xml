@@ -17,6 +17,9 @@
             android:id="@+id/with_ingredient_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLength="15"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:textColorHint="@android:color/darker_gray"
             android:textColor="@android:color/white"/>
 
@@ -47,6 +50,9 @@
             android:id="@+id/without_ingredient_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLength="15"
+            android:singleLine="true"
+            android:imeOptions="actionNone"
             android:textColorHint="@android:color/darker_gray"
             android:textColor="@android:color/white"/>
 
