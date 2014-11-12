@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SyntaxDesigns</string>
+    <string name="app_name">Recipe Box</string>
     <string name="find_recipes">Find Recipes</string>
     <string name="grocery_list">Grocery List</string>
     <string name="saved_recipes">Saved Recipes</string>
