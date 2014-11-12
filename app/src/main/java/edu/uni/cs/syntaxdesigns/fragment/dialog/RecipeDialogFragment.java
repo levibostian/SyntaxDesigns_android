@@ -5,7 +5,6 @@ import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
-import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import edu.uni.cs.syntaxdesigns.view.HtmlView;
@@ -29,12 +28,12 @@ import static edu.uni.cs.syntaxdesigns.view.NewRecipeView.DetailsListener;
 public class RecipeDialogFragment extends DialogFragment implements DetailsListener {
 
     private static final String RECIPE_RESULTS = "recipeDialog.recipeResults";
+    private static final String WEB_VIEW_DIALOG = "recipeDialog.webView";
 
     private PhraseResults mResults;
     private NewRecipeView mNewRecipeView;
     private Dialog mDialog;
     private Resources mResources;
-    private HtmlView mHtmlView;
 
     @Inject YummlyApi mYummlyApi;
 
@@ -58,7 +57,6 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
         SyntaxDesignsApplication.inject(this);
 
         mNewRecipeView = new NewRecipeView(getActivity(), mResults);
-        mHtmlView = new HtmlView(getActivity());
 
         mNewRecipeView.setCallback(this);
 
@@ -90,8 +88,7 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
                                     new Callback<RecipeIdVo>() {
                                         @Override
                                         public void success(RecipeIdVo recipeIdVo, Response response) {
-                                            mHtmlView.setHtml(recipeIdVo.source.sourceRecipeUrl);
-                                            mDialog.setContentView(mHtmlView);
+                                            WebViewDialogFragment.newInstance(recipeIdVo.source.sourceRecipeUrl).show(getActivity().getFragmentManager(), WEB_VIEW_DIALOG);
                                         }
 
                                         @Override
