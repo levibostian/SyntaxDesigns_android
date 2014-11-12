@@ -19,5 +19,6 @@
     <string name="search">Search</string>
     <string name="search_hint">Search for recipes</string>
     <string name="save_recipe">Save Recipe</string>
+    <string name="grocery_list_filter_message">Which recipes are you\nshopping for?</string>
 
 </resources>
