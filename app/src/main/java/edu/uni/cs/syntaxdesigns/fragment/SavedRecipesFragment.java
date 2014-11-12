@@ -5,41 +5,36 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 import com.squareup.otto.Bus;
 import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
+import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
+import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
+import edu.uni.cs.syntaxdesigns.adapter.SavedRecipesAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
-import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
 import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
-import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
-import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
 import edu.uni.cs.syntaxdesigns.fragment.filter.SavedRecipesFilterFragment;
+import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 
 public class SavedRecipesFragment extends FilteringFragment {
 
     private SavedRecipesFilterFragment mFilterFragment;
+    private ListView mListView;
+    private SavedRecipesAdapter mSavedRecipesAdapter;
 
-    private EditText mRecipeName;
-    private EditText mIngredientName;
-    private CheckBox mHaveIngredient;
-    private CheckBox mFavoriteRecipe;
-    private Button mAddDataButton;
-    private TextView mRecipeNameRead;
-    private TextView mIngredientNameRead;
-    private TextView mHaveIngredientRead;
-    private TextView mIsFavoriteRead;
-    private Button mReadDataButton;
-    private EditText mRecipeRowId;
 
     @Inject RecipeDao mRecipeDao;
-    @Inject IngredientsDao mIngredientsDao;
+    @Inject YummlyApi mYummlyApi;
     @Inject Bus mBus;
 
     public static SavedRecipesFragment newInstance() {
@@ -62,62 +57,71 @@ public class SavedRecipesFragment extends FilteringFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_saved_recipes, container, false);
 
-        mRecipeName = (EditText) rootView.findViewById(R.id.recipe_name_edittext);
-        mIngredientName = (EditText) rootView.findViewById(R.id.ingredient_name_edittext);
-        mHaveIngredient = (CheckBox) rootView.findViewById(R.id.have_ingredient);
-        mFavoriteRecipe = (CheckBox) rootView.findViewById(R.id.favorite_recipe);
-        mAddDataButton = (Button) rootView.findViewById(R.id.add_data_button);
-        mRecipeNameRead = (TextView) rootView.findViewById(R.id.recipe_name_read);
-        mIngredientNameRead = (TextView) rootView.findViewById(R.id.ingredient_name_read);
-        mHaveIngredientRead = (TextView) rootView.findViewById(R.id.have_ingredient_read);
-        mIsFavoriteRead = (TextView) rootView.findViewById(R.id.is_favorite_read);
-        mReadDataButton = (Button) rootView.findViewById(R.id.read_data_button);
-        mRecipeRowId = (EditText) rootView.findViewById(R.id.recipe_row_id);
+        mListView = (ListView) rootView.findViewById(R.id.saved_recipes_list);
 
-        mAddDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addDataToDatabase();
-            }
-        });
-
-        mReadDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mRecipeRowId.getText() != null) {
-                    readDataFromDatabase();
-                } else {
-                    Toast.makeText(getActivity(), "Enter recipe rowId to read", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        populate();
 
         return rootView;
     }
 
-    private void addDataToDatabase() {
-        long recipeRowId = mRecipeDao.insertRecipe(String.valueOf(mRecipeName.getText()), "http:www.yummly.com/" + mRecipeName);
+    private void populate() {
+        ArrayList<SavedRecipeVo> savedRecipes = getRecipes();
+        getRecipesById(savedRecipes);
 
-        mIngredientsDao.insertIngredient(String.valueOf(mIngredientName.getText()), mHaveIngredient.isChecked(), recipeRowId);
-        mRecipeDao.favoriteRecipe(recipeRowId, mFavoriteRecipe.isChecked());
-
-        mBus.post(new DatabaseUpdateEvent());
-        Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT).show();
     }
 
-    private void readDataFromDatabase() {
-        RecipeCursor recipeCursor = mRecipeDao.readRecipeByRowId(Long.valueOf(String.valueOf(mRecipeRowId.getText())));
-        recipeCursor.moveToFirst();
-        IngredientsCursor ingredientsCursor = mIngredientsDao.readIngredientsForRecipe(recipeCursor.readRowId());
-        ingredientsCursor.moveToFirst();
+    private void initializeSavedRecipesAdapter(ArrayList<RecipeIdVo> recipes) {
+        mSavedRecipesAdapter = new SavedRecipesAdapter(getActivity(), recipes);
+        mListView.setAdapter(mSavedRecipesAdapter);
 
-        mRecipeNameRead.setText(recipeCursor.readName());
-        mIngredientNameRead.setText(ingredientsCursor.readName());
-        mHaveIngredientRead.setText(ingredientsCursor.isHaveIt() ? "has it" : "does not have it");
-        mIsFavoriteRead.setText(recipeCursor.isFavorite() ? "is favorite" : "not favorite");
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        recipeCursor.close();
-        ingredientsCursor.close();
+            }
+        });
+    }
+
+    private void getRecipesById(ArrayList<SavedRecipeVo> savedRecipes) {
+        final ArrayList<RecipeIdVo> recipeIdVos = new ArrayList<RecipeIdVo>();
+
+        for (SavedRecipeVo recipeVo : savedRecipes) {
+            mYummlyApi.searchByRecipeId(recipeVo.yummlyUrl,
+                                        YummlyUtil.getApplicationId(getActivity()),
+                                        YummlyUtil.getApplicationKey(getActivity()),
+                                        new Callback<RecipeIdVo>() {
+                                            @Override
+                                            public void success(RecipeIdVo recipeIdVo, Response response) {
+                                                recipeIdVos.add(recipeIdVo);
+                                                initializeSavedRecipesAdapter(recipeIdVos);
+                                            }
+
+                                            @Override
+                                            public void failure(RetrofitError error) {
+                                                Toast.makeText(getActivity(), getString(R.string.yummly_error), Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+        }
+
+    }
+
+    private ArrayList<SavedRecipeVo> getRecipes() {
+        ArrayList<SavedRecipeVo> recipes = new ArrayList<SavedRecipeVo>();
+        RecipeCursor cursor = mRecipeDao.readRecipes();
+
+        if (cursor.moveToFirst()) {
+            do {
+                SavedRecipeVo recipe = new SavedRecipeVo();
+                recipe.recipeName = cursor.readName();
+                recipe.rowId = cursor.readRowId();
+                recipe.yummlyUrl = cursor.readYummlyUrl();
+                recipe.isFavorite = cursor.isFavorite();
+
+                recipes.add(recipe);
+            } while (cursor.moveToNext());
+        }
+
+        return recipes;
     }
 
 

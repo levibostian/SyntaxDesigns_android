@@ -70,7 +70,6 @@ public class GroceryListFragment extends FilteringFragment {
     }
 
     public void populate() {
-        LogUtil.d("populating");
         ArrayList<IngredientVo> ingredients = getIngredients();
         GroceryListAdapter groceryListAdapter = new GroceryListAdapter(getActivity(), ingredients);
         mGroceryList.setAdapter(groceryListAdapter);
