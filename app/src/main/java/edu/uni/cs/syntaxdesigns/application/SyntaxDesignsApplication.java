@@ -2,6 +2,7 @@ package edu.uni.cs.syntaxdesigns.application;
 
 import android.app.Application;
 import dagger.ObjectGraph;
+import edu.uni.cs.syntaxdesigns.module.AdapterModule;
 import edu.uni.cs.syntaxdesigns.module.DatabaseModule;
 import edu.uni.cs.syntaxdesigns.module.FragmentModule;
 import edu.uni.cs.syntaxdesigns.module.UtilModule;
@@ -24,6 +25,7 @@ public class SyntaxDesignsApplication extends Application {
 
     protected List<Object> getModules() {
         return Arrays.asList(
+            new AdapterModule(),
             new UtilModule(this),
             new FragmentModule(),
             new YummlyModule(this),

@@ -1,12 +1,12 @@
-package edu.uni.cs.syntaxdesigns.Adapters;
+package edu.uni.cs.syntaxdesigns.adapter;
 
-import edu.uni.cs.syntaxdesigns.R;
-import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 
 import java.util.List;
 

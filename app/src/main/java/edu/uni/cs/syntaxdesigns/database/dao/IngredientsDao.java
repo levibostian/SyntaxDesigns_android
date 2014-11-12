@@ -36,6 +36,17 @@ public class IngredientsDao {
         return rowId;
     }
 
+    public IngredientsCursor readIngredients() {
+        return new IngredientsCursor(mReadableDatabase.query(IngredientsTable.TABLE_NAME,
+                                                             new String[]{"*"},
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null,
+                                                             null));
+    }
+
     public IngredientsCursor readIngredientsForRecipe(long recipeId) {
         String[] columns = {IngredientsTable.Columns._ID,
         IngredientsTable.Columns.COLUMN_NAME.name,
