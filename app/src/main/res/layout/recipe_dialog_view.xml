@@ -3,17 +3,100 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
     android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/recipe_name"
+        android:textSize="22dp"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/save_recipe"
+    <LinearLayout
+        android:paddingTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:contentDescription="@string/recipe_image"
+            android:id="@+id/recipe_image"
+            android:layout_width="90dp"
+            android:layout_height="50dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/time"
+                    style="@style/AppTheme.RecipeDialogText"/>
+
+                <TextView
+                    android:id="@+id/time_in_minutes"
+                    style="@style/AppTheme.RecipeDialogText"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/rating"
+                    style="@style/AppTheme.RecipeDialogText"/>
+
+                <TextView
+                    android:id="@+id/rating_by_stars"
+                    style="@style/AppTheme.RecipeDialogText"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:text="@string/select_ingredients"
+        style="@style/AppTheme.RecipeDialogText"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="10dp"/>
+
+    <ListView
+        android:id="@+id/ingredients_list"
+        android:paddingTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"/>
+
+    <Button
+        android:id="@+id/view_directions"
+        android:text="@string/view_directions"
+        android:paddingTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="16dp"/>
+
+    <Button
+        android:id="@+id/save_recipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="16dp"
+        android:layout_gravity="center_horizontal"
         android:text="@string/save_recipe"/>
 
 </LinearLayout>

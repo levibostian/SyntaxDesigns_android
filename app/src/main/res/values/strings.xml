@@ -19,5 +19,9 @@
     <string name="search">Search</string>
     <string name="search_hint">Search for recipes</string>
     <string name="save_recipe">Save Recipe</string>
+    <string name="select_ingredients">Select ingredients you currently have:</string>
+    <string name="view_directions">View Directions</string>
+    <string name="stars">Stars</string>
+    <string name="recipe_image">Recipe Image</string>
 
 </resources>
