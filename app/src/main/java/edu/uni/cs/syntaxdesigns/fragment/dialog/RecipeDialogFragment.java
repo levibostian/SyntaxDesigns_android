@@ -88,7 +88,8 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
                                     new Callback<RecipeIdVo>() {
                                         @Override
                                         public void success(RecipeIdVo recipeIdVo, Response response) {
-                                            WebViewDialogFragment.newInstance(recipeIdVo.source.sourceRecipeUrl).show(getActivity().getFragmentManager(), WEB_VIEW_DIALOG);
+                                            WebViewDialogFragment.newInstance(recipeIdVo.source.sourceRecipeUrl).show(getActivity().getFragmentManager(),
+                                                                                                                      WEB_VIEW_DIALOG);
                                         }
 
                                         @Override
@@ -96,5 +97,10 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
                                             Toast.makeText(getActivity(),mResources.getString(R.string.yummly_error), Toast.LENGTH_SHORT).show();
                                         }
                                     });
+    }
+
+    @Override
+    public void dismissDialog() {
+        mDialog.dismiss();
     }
 }
