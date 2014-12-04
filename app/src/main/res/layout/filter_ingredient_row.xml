@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity$PlaceholderFragment"
-    tools:background="@android:color/black"
-    android:weightSum="2">
+    tools:background="@android:color/black">
 
     <TextView
         android:id="@+id/ingredient_name"
@@ -16,18 +15,19 @@
         android:textSize="17dp"
         android:ellipsize="end"
         android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/delete_ingredient"
         tools:text="Onion"
-        android:layout_gravity="center_vertical"
-        android:paddingRight="5dp"
-        android:layout_weight="1"/>
+        android:layout_gravity="center_vertical"/>
 
     <ImageView
         android:id="@+id/delete_ingredient"
         android:src="@android:drawable/ic_input_delete"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:paddingLeft="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         tools:src="@android:drawable/ic_input_delete"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"/>
+        android:layout_gravity="center_vertical"/>
 
-</LinearLayout>
+</RelativeLayout>
