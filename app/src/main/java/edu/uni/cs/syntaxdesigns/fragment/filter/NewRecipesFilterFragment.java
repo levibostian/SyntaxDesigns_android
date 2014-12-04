@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import edu.uni.cs.syntaxdesigns.Adapters.IngredientsGridAdapter;
+import android.widget.ListView;
+import edu.uni.cs.syntaxdesigns.Adapters.IngredientsListAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.util.FilterSearchUtil;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewRecipesFilterFragment extends Fragment implements IngredientsGridAdapter.IngredientsGridListener {
+public class NewRecipesFilterFragment extends Fragment implements IngredientsListAdapter.IngredientsGridListener {
 
     private static final String EMPTY_STRING = "";
 
@@ -28,10 +28,10 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
     private EditText mTime;
     private Button mAddTime;
     private Button mClearFilters;
-    private GridView mWithIngredientsList;
-    private GridView mWithoutIngredientsList;
-    private IngredientsGridAdapter mWithIngredientsAdapter;
-    private IngredientsGridAdapter mWithoutIngredientsAdapter;
+    private ListView mWithIngredientsList;
+    private ListView mWithoutIngredientsList;
+    private IngredientsListAdapter mWithIngredientsAdapter;
+    private IngredientsListAdapter mWithoutIngredientsAdapter;
 
     private Callbacks mCallback;
 
@@ -54,8 +54,8 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
         mTime = (EditText) view.findViewById(R.id.time_in_minutes);
         mClearFilters = (Button) view.findViewById(R.id.clear_filters);
         mAddTime = (Button) view.findViewById(R.id.add_time);
-        mWithIngredientsList = (GridView) view.findViewById(R.id.with_ingredients_list);
-        mWithoutIngredientsList = (GridView) view.findViewById(R.id.without_ingredients_list);
+        mWithIngredientsList = (ListView) view.findViewById(R.id.with_ingredients_list);
+        mWithoutIngredientsList = (ListView) view.findViewById(R.id.without_ingredients_list);
 
         SyntaxDesignsApplication.inject(this);
 
@@ -129,14 +129,14 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsGri
     }
 
     private void initializeWithIngredientsGrid(List<String> ingredients) {
-        mWithIngredientsAdapter = new IngredientsGridAdapter(getActivity(), ingredients, true);
+        mWithIngredientsAdapter = new IngredientsListAdapter(getActivity(), ingredients, true);
         mWithIngredientsAdapter.setCallbacks(this);
 
         mWithIngredientsList.setAdapter(mWithIngredientsAdapter);
     }
 
     private void initializeWithoutIngredientsGrid(List<String> ingredients) {
-        mWithoutIngredientsAdapter = new IngredientsGridAdapter(getActivity(), ingredients, false);
+        mWithoutIngredientsAdapter = new IngredientsListAdapter(getActivity(), ingredients, false);
         mWithoutIngredientsAdapter.setCallbacks(this);
 
         mWithoutIngredientsList.setAdapter(mWithoutIngredientsAdapter);

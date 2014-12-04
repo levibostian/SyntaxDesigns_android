@@ -11,14 +11,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class IngredientsGridAdapter extends BaseArrayAdapter {
+public class IngredientsListAdapter extends BaseArrayAdapter {
 
     private List<String> mIngredients;
 
     private IngredientsGridListener mCallback;
     private boolean mIsWithIngredientList;
 
-    public IngredientsGridAdapter(Context context, List<String> ingredients, boolean isWithIngredientList) {
+    public IngredientsListAdapter(Context context, List<String> ingredients, boolean isWithIngredientList) {
         super(context, 0, ingredients);
 
         mIngredients = ingredients;
