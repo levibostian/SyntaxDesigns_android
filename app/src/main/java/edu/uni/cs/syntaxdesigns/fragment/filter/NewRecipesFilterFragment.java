@@ -5,13 +5,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TableLayout;
 import edu.uni.cs.syntaxdesigns.Adapters.IngredientsListAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.util.FilterSearchUtil;
+import edu.uni.cs.syntaxdesigns.view.ExpandedListView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -28,8 +32,8 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
     private EditText mTime;
     private Button mAddTime;
     private Button mClearFilters;
-    private ListView mWithIngredientsList;
-    private ListView mWithoutIngredientsList;
+    private ExpandedListView mWithIngredientsList;
+    private ExpandedListView mWithoutIngredientsList;
     private IngredientsListAdapter mWithIngredientsAdapter;
     private IngredientsListAdapter mWithoutIngredientsAdapter;
 
@@ -54,8 +58,8 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
         mTime = (EditText) view.findViewById(R.id.time_in_minutes);
         mClearFilters = (Button) view.findViewById(R.id.clear_filters);
         mAddTime = (Button) view.findViewById(R.id.add_time);
-        mWithIngredientsList = (ListView) view.findViewById(R.id.with_ingredients_list);
-        mWithoutIngredientsList = (ListView) view.findViewById(R.id.without_ingredients_list);
+        mWithIngredientsList = (ExpandedListView) view.findViewById(R.id.with_ingredients_list);
+        mWithoutIngredientsList = (ExpandedListView) view.findViewById(R.id.without_ingredients_list);
 
         SyntaxDesignsApplication.inject(this);
 

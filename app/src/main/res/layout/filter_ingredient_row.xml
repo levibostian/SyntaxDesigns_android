@@ -12,6 +12,7 @@
         android:id="@+id/ingredient_name"
         android:textColor="@android:color/white"
         android:layout_width="wrap_content"
+        android:textSize="17dp"
         android:layout_height="wrap_content"
         tools:text="Onion"
         android:layout_gravity="center_vertical"
@@ -20,8 +21,8 @@
     <ImageView
         android:id="@+id/delete_ingredient"
         android:src="@android:drawable/ic_input_delete"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         tools:src="@android:drawable/ic_input_delete"
         android:layout_gravity="center_vertical"/>
 
