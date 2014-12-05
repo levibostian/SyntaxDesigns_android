@@ -1,11 +1,13 @@
 package edu.uni.cs.syntaxdesigns.fragment;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import edu.uni.cs.syntaxdesigns.R;
@@ -18,10 +20,10 @@ import edu.uni.cs.syntaxdesigns.fragment.dialog.RecipeDialogFragment;
 import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
+import edu.uni.cs.syntaxdesigns.view.EmptyView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.mime.TypedString;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -33,6 +35,10 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     private NewRecipesFilterFragment mFilterFragment;
     private ListView mListView;
     private SearchRecipesAdapter mAdapter;
+    private EmptyView mEmptyView;
+    private Button mRetry;
+    private Resources mResources;
+
     private String mSearchPhrase;
 
     private static final String RECIPE_DIALOG = "newRecipes.recipeDialog";
@@ -58,6 +64,8 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     }
 
     public void startSearchByPhrase(String searchPhrase) {
+        initializeEmptyView(mResources.getString(R.string.loading), View.VISIBLE);
+
         mSearchPhrase = searchPhrase;
         mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()),
                                   YummlyUtil.getApplicationKey(getActivity()),
@@ -70,7 +78,15 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
 
                                       @Override
                                       public void failure(RetrofitError error) {
-                                          Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
+                                          initializeEmptyView(mResources.getString(R.string.yummly_error), View.INVISIBLE);
+                                          mRetry.setVisibility(View.VISIBLE);
+                                          mRetry.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  mRetry.setVisibility(View.INVISIBLE);
+                                                  startSearchByPhrase(mSearchPhrase);
+                                              }
+                                          });
                                       }
                                   });
     }
@@ -80,6 +96,9 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
         View rootView = inflater.inflate(R.layout.fragment_new_recipes, container, false);
 
         mListView = (ListView) rootView.findViewById(R.id.new_recipe_list_view);
+        mEmptyView = (EmptyView) rootView.findViewById(R.id.new_recipes_empty_view);
+        mRetry = (Button) rootView.findViewById(R.id.retry);
+        mResources = getResources();
 
         mSearchPhrase = DEFAULT_NEW_RECIPES_SEARCH;
 
@@ -96,6 +115,8 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     }
 
     private void initializeListView() {
+        initializeEmptyView(mResources.getString(R.string.loading), View.VISIBLE);
+
         mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()),
                                   YummlyUtil.getApplicationKey(getActivity()),
                                   mSearchPhrase,
@@ -107,7 +128,15 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
 
                                       @Override
                                       public void failure(RetrofitError error) {
-                                          Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
+                                          initializeEmptyView(mResources.getString(R.string.yummly_error), View.INVISIBLE);
+                                          mRetry.setVisibility(View.VISIBLE);
+                                          mRetry.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  mRetry.setVisibility(View.INVISIBLE);
+                                                  initializeListView();
+                                              }
+                                          });
                                       }
                                   });
     }
@@ -115,6 +144,9 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     private void initializeListViewAdapter(SearchByPhraseVo searchByPhraseResults) {
         mAdapter = new SearchRecipesAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
         mListView.setAdapter(mAdapter);
+        mListView.setEmptyView(mEmptyView);
+
+        mEmptyView.setText(mResources.getString(R.string.no_results), View.INVISIBLE);
     }
 
     @Override
@@ -123,7 +155,8 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     }
 
     @Override
-    public void updateNewRecipeSearch(ArrayList<String> withIngredients, ArrayList<String> withoutIngredients, ArrayList<String> withCourses, String withTime) {
+    public void updateNewRecipeSearch(final ArrayList<String> withIngredients, final ArrayList<String> withoutIngredients, final ArrayList<String> withCourses, final String withTime) {
+        initializeEmptyView(mResources.getString(R.string.loading), View.VISIBLE);
         mYummlyApi.searchWithFilter(YummlyUtil.getApplicationId(getActivity()),
                                     YummlyUtil.getApplicationKey(getActivity()),
                                     mSearchPhrase.matches(DEFAULT_NEW_RECIPES_SEARCH) ? DEFAULT_NEW_RECIPES_SEARCH : mSearchPhrase,
@@ -139,8 +172,12 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
 
                                         @Override
                                         public void failure(RetrofitError error) {
-                                            Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
                                         }
                                     });
+    }
+
+    private void initializeEmptyView(String message, int progressVisibility) {
+        mEmptyView.setText(message, progressVisibility);
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 }

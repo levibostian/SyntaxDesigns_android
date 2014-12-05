@@ -126,7 +126,13 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
                 mWithoutIngredients.setText(EMPTY_STRING);
                 mTime.setText(EMPTY_STRING);
                 mFilterSearchUtil.clearFilters();
-                mWithIngredientsAdapter.notifyDataSetChanged();
+                if (mWithIngredientsAdapter != null) {
+                    mWithIngredientsAdapter.notifyDataSetChanged();
+                }
+
+                if (mWithoutIngredientsAdapter != null) {
+                    mWithoutIngredientsAdapter.notifyDataSetChanged();
+                }
                 updateNewRecipeFragment();
             }
         });
