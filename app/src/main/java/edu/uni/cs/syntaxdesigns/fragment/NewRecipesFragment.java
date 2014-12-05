@@ -11,6 +11,7 @@ import android.widget.Toast;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
+import edu.uni.cs.syntaxdesigns.activity.MainActivity;
 import edu.uni.cs.syntaxdesigns.adapter.SearchRecipesAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.fragment.dialog.RecipeDialogFragment;
@@ -20,16 +21,19 @@ import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedString;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 
-public class NewRecipesFragment extends FilteringFragment {
+public class NewRecipesFragment extends FilteringFragment implements NewRecipesFilterFragment.Callbacks {
 
     private static final String DEFAULT_NEW_RECIPES_SEARCH = "popular";
 
     private NewRecipesFilterFragment mFilterFragment;
     private ListView mListView;
     private SearchRecipesAdapter mAdapter;
+    private String mSearchPhrase;
 
     private static final String RECIPE_DIALOG = "newRecipes.recipeDialog";
 
@@ -49,10 +53,12 @@ public class NewRecipesFragment extends FilteringFragment {
 
         SyntaxDesignsApplication.inject(this);
 
-        mFilterFragment = NewRecipesFilterFragment.newInstance();
+        mFilterFragment = (NewRecipesFilterFragment) ((MainActivity) getActivity()).getFilterFragment();
+        mFilterFragment.setCallback(this);
     }
 
     public void startSearchByPhrase(String searchPhrase) {
+        mSearchPhrase = searchPhrase;
         mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()),
                                   YummlyUtil.getApplicationKey(getActivity()),
                                   searchPhrase,
@@ -75,6 +81,8 @@ public class NewRecipesFragment extends FilteringFragment {
 
         mListView = (ListView) rootView.findViewById(R.id.new_recipe_list_view);
 
+        mSearchPhrase = DEFAULT_NEW_RECIPES_SEARCH;
+
         initializeListView();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,7 +98,7 @@ public class NewRecipesFragment extends FilteringFragment {
     private void initializeListView() {
         mYummlyApi.searchByPhrase(YummlyUtil.getApplicationId(getActivity()),
                                   YummlyUtil.getApplicationKey(getActivity()),
-                                  DEFAULT_NEW_RECIPES_SEARCH,
+                                  mSearchPhrase,
                                   new Callback<SearchByPhraseVo>() {
                                       @Override
                                       public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
@@ -112,5 +120,27 @@ public class NewRecipesFragment extends FilteringFragment {
     @Override
     public Fragment getFilterFragment() {
         return mFilterFragment;
+    }
+
+    @Override
+    public void updateNewRecipeSearch(ArrayList<String> withIngredients, ArrayList<String> withoutIngredients, ArrayList<String> withCourses, String withTime) {
+        mYummlyApi.searchWithFilter(YummlyUtil.getApplicationId(getActivity()),
+                                    YummlyUtil.getApplicationKey(getActivity()),
+                                    mSearchPhrase.matches(DEFAULT_NEW_RECIPES_SEARCH) ? DEFAULT_NEW_RECIPES_SEARCH : mSearchPhrase,
+                                    withIngredients,
+                                    withoutIngredients,
+                                    withCourses,
+                                    withTime,
+                                    new Callback<SearchByPhraseVo>() {
+                                        @Override
+                                        public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
+                                            initializeListViewAdapter(searchByPhraseVo);
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+                                            Toast.makeText(getActivity(), R.string.yummly_error, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
     }
 }
