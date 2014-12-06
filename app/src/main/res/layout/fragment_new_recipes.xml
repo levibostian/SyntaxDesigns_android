@@ -16,6 +16,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+            android:id="@+id/current_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textSize="17dp"/>
+
         <ListView
             android:id="@+id/new_recipe_list_view"
             android:layout_width="match_parent"

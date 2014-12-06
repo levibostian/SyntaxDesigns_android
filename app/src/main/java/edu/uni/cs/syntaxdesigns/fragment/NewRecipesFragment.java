@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
@@ -38,6 +39,7 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     private EmptyView mEmptyView;
     private Button mRetry;
     private Resources mResources;
+    private TextView mCurrentSearch;
 
     private String mSearchPhrase;
 
@@ -63,7 +65,7 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
         mFilterFragment.setCallback(this);
     }
 
-    public void startSearchByPhrase(String searchPhrase) {
+    public void startSearchByPhrase(final String searchPhrase) {
         initializeEmptyView(mResources.getString(R.string.loading), View.VISIBLE);
 
         mSearchPhrase = searchPhrase;
@@ -73,6 +75,8 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
                                   new Callback<SearchByPhraseVo>() {
                                       @Override
                                       public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
+                                          mCurrentSearch.setText(getString(R.string.current_search) + " " + searchPhrase);
+                                          mCurrentSearch.setVisibility(View.VISIBLE);
                                           initializeListViewAdapter(searchByPhraseVo);
                                       }
 
@@ -98,9 +102,11 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
         mListView = (ListView) rootView.findViewById(R.id.new_recipe_list_view);
         mEmptyView = (EmptyView) rootView.findViewById(R.id.new_recipes_empty_view);
         mRetry = (Button) rootView.findViewById(R.id.retry);
+        mCurrentSearch = (TextView) rootView.findViewById(R.id.current_search);
         mResources = getResources();
 
         mSearchPhrase = DEFAULT_NEW_RECIPES_SEARCH;
+        mCurrentSearch.setVisibility(View.INVISIBLE);
 
         initializeListView();
 
