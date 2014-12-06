@@ -122,11 +122,4 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
 
         mBus.unregister(this);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        mBus.unregister(this);
-    }
 }
