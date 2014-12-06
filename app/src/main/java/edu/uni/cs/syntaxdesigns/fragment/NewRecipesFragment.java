@@ -76,7 +76,6 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
                                       @Override
                                       public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
                                           mCurrentSearch.setText(getString(R.string.current_search) + " " + searchPhrase);
-                                          mCurrentSearch.setVisibility(View.VISIBLE);
                                           initializeListViewAdapter(searchByPhraseVo);
                                       }
 
@@ -106,7 +105,6 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
         mResources = getResources();
 
         mSearchPhrase = DEFAULT_NEW_RECIPES_SEARCH;
-        mCurrentSearch.setVisibility(View.INVISIBLE);
 
         initializeListView();
 
@@ -129,6 +127,7 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
                                   new Callback<SearchByPhraseVo>() {
                                       @Override
                                       public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
+                                          mCurrentSearch.setText(getString(R.string.current_search) + " " + mSearchPhrase);
                                           initializeListViewAdapter(searchByPhraseVo);
                                       }
 
