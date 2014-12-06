@@ -47,6 +47,12 @@ public class RecipeDialogIngredientsListAdapter extends BaseArrayAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        if (mCheckedItems.contains(mIngredients.get(position))) {
+            viewHolder.checkbox.setChecked(true);
+        } else {
+            viewHolder.checkbox.setChecked(false);
+        }
+
         viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
