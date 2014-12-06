@@ -40,6 +40,7 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     private Button mRetry;
     private Resources mResources;
     private TextView mCurrentSearch;
+    private Button mClearSearch;
 
     private String mSearchPhrase;
 
@@ -75,6 +76,12 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
                                   new Callback<SearchByPhraseVo>() {
                                       @Override
                                       public void success(SearchByPhraseVo searchByPhraseVo, Response response) {
+                                          if (!mSearchPhrase.matches(DEFAULT_NEW_RECIPES_SEARCH)) {
+                                              mClearSearch.setVisibility(View.VISIBLE);
+                                          } else {
+                                              mClearSearch.setVisibility(View.INVISIBLE);
+                                          }
+
                                           mCurrentSearch.setText(getString(R.string.current_search) + " " + searchPhrase);
                                           initializeListViewAdapter(searchByPhraseVo);
                                       }
@@ -102,9 +109,18 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
         mEmptyView = (EmptyView) rootView.findViewById(R.id.new_recipes_empty_view);
         mRetry = (Button) rootView.findViewById(R.id.retry);
         mCurrentSearch = (TextView) rootView.findViewById(R.id.current_search);
+        mClearSearch = (Button) rootView.findViewById(R.id.clear_search);
+        mClearSearch.setVisibility(View.INVISIBLE);
         mResources = getResources();
 
         mSearchPhrase = DEFAULT_NEW_RECIPES_SEARCH;
+
+        mClearSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSearchByPhrase(DEFAULT_NEW_RECIPES_SEARCH);
+            }
+        });
 
         initializeListView();
 
