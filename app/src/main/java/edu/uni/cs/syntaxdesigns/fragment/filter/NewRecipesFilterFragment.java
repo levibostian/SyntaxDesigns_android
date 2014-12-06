@@ -114,8 +114,10 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
         mAddTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFilterSearchUtil.withTime(mTime.getText().toString());
-                updateNewRecipeFragment();
+                if (!mTime.getText().toString().matches(EMPTY_STRING)) {
+                    mFilterSearchUtil.withTime(mTime.getText().toString());
+                    updateNewRecipeFragment();
+                }
             }
         });
 
