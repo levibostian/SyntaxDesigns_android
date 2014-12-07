@@ -125,11 +125,11 @@ public class NewRecipeView extends LinearLayout {
         }
 
         Toast.makeText(mContext, "Recipe and ingredients have been saved", Toast.LENGTH_SHORT).show();
-        mCallback.dismissDialog();
+        mCallback.updateDatabaseAndCloseDialog();
     }
 
     public interface DetailsListener {
         void startRecipeDetials(String recipeId);
-        void dismissDialog();
+        void updateDatabaseAndCloseDialog();
     }
 }

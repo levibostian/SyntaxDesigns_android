@@ -205,7 +205,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             Locale l = Locale.getDefault();
             switch (position) {
                 case NEW_RECIPE_FRAGMENT:
-                    return getString(R.string.find_recipes).toUpperCase(l);
+                    return getString(R.string.browse_recipes).toUpperCase(l);
                 case GROCERY_LIST_FRAGMENT:
                     return getString(R.string.grocery_list).toUpperCase(l);
                 case SAVED_RECIPES:
