@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -103,16 +104,20 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         return super.onPrepareOptionsMenu(menu);
     }
 
-    private void addNewRecipeSearchToMenu(Menu menu) {
+    private void addNewRecipeSearchToMenu(final Menu menu) {
         menu.findItem(R.id.search).setVisible(true);
-
-        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        final MenuItem searchItem = menu.findItem(R.id.search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String search) {
-                hideSoftKeyboard();
-                mSectionsPagerAdapter.mNewRecipesFragment.startSearchByPhrase(search);
-                return true;
+                if (!search.matches("")) {
+                    searchView.onActionViewCollapsed();
+                    mSectionsPagerAdapter.mNewRecipesFragment.startSearchByPhrase(search);
+                    return true;
+                }
+
+                return false;
             }
 
             @Override
