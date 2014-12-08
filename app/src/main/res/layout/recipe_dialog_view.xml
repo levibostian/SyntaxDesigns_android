@@ -44,38 +44,31 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/time"
+                    style="@style/AppTheme.RecipeDialogText"/>
 
-                    <TextView
-                        android:text="@string/time"
-                        style="@style/AppTheme.RecipeDialogText"/>
+                <TextView
+                    android:id="@+id/time_in_minutes"
+                    style="@style/AppTheme.RecipeDialogText"/>
 
-                    <TextView
-                        android:id="@+id/time_in_minutes"
-                        style="@style/AppTheme.RecipeDialogText"/>
+            </LinearLayout>
 
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:text="@string/rating"
+                    style="@style/AppTheme.RecipeDialogText"/>
 
-                    <TextView
-                        android:text="@string/rating"
-                        style="@style/AppTheme.RecipeDialogText"/>
-
-                    <TextView
-                        android:id="@+id/rating_by_stars"
-                        style="@style/AppTheme.RecipeDialogText"/>
-
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/rating_by_stars"
+                    style="@style/AppTheme.RecipeDialogText"/>
 
             </LinearLayout>
 

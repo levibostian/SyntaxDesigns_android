@@ -1,8 +1,5 @@
 package edu.uni.cs.syntaxdesigns.view;
 
-import edu.uni.cs.syntaxdesigns.R;
-import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
-import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
@@ -16,9 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
+import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
+import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
 
 public class SavedRecipeView extends LinearLayout {
 
+    private ImageView mCloseDialog;
     private RecipeIdVo mRecipe;
     private TextView mRecipeName;
     private ImageView mRecipeImage;
@@ -53,6 +54,7 @@ public class SavedRecipeView extends LinearLayout {
         mResources = context.getResources();
         mContext = context;
 
+        mCloseDialog = (ImageView) findViewById(R.id.close_dialog);
         mRecipeName = (TextView) findViewById(R.id.recipe_name);
         mListView = (ListView) findViewById(R.id.ingredients_list);
         mTime = (TextView) findViewById(R.id.time_in_minutes);
@@ -69,6 +71,13 @@ public class SavedRecipeView extends LinearLayout {
                .into(mRecipeImage);
 
         setTextViews();
+
+        mCloseDialog.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.closeDialog();
+            }
+        });
 
         mFavorite.setChecked(mSavedRecipeVo.isFavorite);
 
@@ -109,5 +118,6 @@ public class SavedRecipeView extends LinearLayout {
     public interface SavedRecipeViewListener {
         void startRecipeDetails();
         void updateFavorite(long id, boolean isFavorite);
+        void closeDialog();
     }
 }

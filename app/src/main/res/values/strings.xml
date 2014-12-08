@@ -12,6 +12,7 @@
     <string name="yummly_error">Error searching for recipes, try the search again</string>
     <string name="filter_results">Filter results</string>
     <string name="num_ingredients">Number of ingredients: </string>
+    <string name="ingredients_list">Ingredients list:</string>
     <string name="time">Time: </string>
     <string name="rating">Rating:</string>
     <string name="cancel">Cancel</string>

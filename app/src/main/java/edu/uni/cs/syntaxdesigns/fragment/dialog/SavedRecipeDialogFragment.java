@@ -123,4 +123,9 @@ public class SavedRecipeDialogFragment extends DialogFragment implements SavedRe
         mRecipeDao.favoriteRecipe(id, isFavorite);
         mBus.post(new DatabaseUpdateEvent());
     }
+
+    @Override
+    public void closeDialog() {
+        getDialog().cancel();
+    }
 }
