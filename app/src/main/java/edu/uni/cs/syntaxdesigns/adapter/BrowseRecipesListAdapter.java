@@ -58,7 +58,7 @@ public class BrowseRecipesListAdapter extends BaseArrayAdapter {
         PhraseResults results = mResults.get(position);
 
         viewHolder.recipeName.setText(results.recipeName);
-        viewHolder.rating.setText(" " + Integer.toString(results.rating) + " " + mResources.getString(R.string.stars));
+        viewHolder.rating.setText(" " + Integer.toString(results.rating) + "/5 " + mResources.getString(R.string.stars));
         viewHolder.numberOfIngredients.setText(" " + Integer.toString(results.ingredients.size()));
         viewHolder.timeToCook.setText(" " + Integer.toString(results.totalTimeInSeconds / 60) + " ");
 

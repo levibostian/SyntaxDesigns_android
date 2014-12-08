@@ -72,7 +72,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
         viewHolder.recipeName.setText(recipe.name);
         viewHolder.numberOfIngredients.setText(" " + recipe.ingredientLines.size());
         viewHolder.timeToCook.setText(" " + recipe.totalTime);
-        viewHolder.rating.setText(" " + Integer.toString(recipe.rating) + " " + mResources.getString(R.string.stars));
+        viewHolder.rating.setText(" " + Integer.toString(recipe.rating) + "/5 " + mResources.getString(R.string.stars));
         viewHolder.star.setChecked(mSavedRecipeVos.get(position).isFavorite);
 
         viewHolder.favorite.setOnClickListener(new View.OnClickListener() {
