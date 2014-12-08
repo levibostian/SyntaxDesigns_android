@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -67,8 +66,8 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
 
             Picasso.with(getContext())
                    .load(results.smallImageUrls.get(0))
-                   .placeholder(R.drawable.ic_launcher)
-                   .error(R.drawable.ic_launcher)
+                   .placeholder(android.R.drawable.ic_menu_gallery)
+                   .error(android.R.drawable.ic_menu_report_image)
                    .fit()
                    .centerCrop()
                    .into(viewHolder.recipeImage);
