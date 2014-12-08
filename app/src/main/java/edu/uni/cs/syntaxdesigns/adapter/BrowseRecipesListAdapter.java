@@ -7,19 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
-public class SearchRecipesAdapter extends BaseArrayAdapter {
+public class BrowseRecipesListAdapter extends BaseArrayAdapter {
 
     private List<PhraseResults> mResults;
     private Resources mResources;
 
-    public SearchRecipesAdapter(Context context, List<PhraseResults> results) {
+    public BrowseRecipesListAdapter(Context context, List<PhraseResults> results) {
         super(context, 0, results);
 
         mResults = results;
@@ -41,7 +40,7 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.new_recipes_list_row, parent, false);
+            convertView = mInflater.inflate(R.layout.browse_recipes_list_row, parent, false);
 
             viewHolder = new ViewHolder();
 

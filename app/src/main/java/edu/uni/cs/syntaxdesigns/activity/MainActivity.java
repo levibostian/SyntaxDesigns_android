@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -16,12 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.fragment.BrowseRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.FilterDrawerFragment;
 import edu.uni.cs.syntaxdesigns.fragment.FilteringFragment;
 import edu.uni.cs.syntaxdesigns.fragment.GroceryListFragment;
-import edu.uni.cs.syntaxdesigns.fragment.NewRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.SavedRecipesFragment;
-import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
+import edu.uni.cs.syntaxdesigns.fragment.filter.BrowseRecipesFilterFragment;
 
 import java.util.Locale;
 
@@ -44,7 +43,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mFilterDrawerFragment = (FilterDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-        mFilterDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), NewRecipesFilterFragment.newInstance());
+        mFilterDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), BrowseRecipesFilterFragment.newInstance());
 
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -113,7 +112,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             public boolean onQueryTextSubmit(String search) {
                 if (!search.matches("")) {
                     searchView.onActionViewCollapsed();
-                    mSectionsPagerAdapter.mNewRecipesFragment.startSearchByPhrase(search);
+                    mSectionsPagerAdapter.mBrowseRecipesFragment.startSearchByPhrase(search);
                     return true;
                 }
 
@@ -168,14 +167,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private NewRecipesFragment mNewRecipesFragment;
+        private BrowseRecipesFragment mBrowseRecipesFragment;
         private GroceryListFragment mGroceryListFragment;
         private SavedRecipesFragment mSavedRecipesFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
 
-            mNewRecipesFragment = NewRecipesFragment.newInstance();
+            mBrowseRecipesFragment = BrowseRecipesFragment.newInstance();
             mGroceryListFragment = GroceryListFragment.newInstance();
             mSavedRecipesFragment = SavedRecipesFragment.newInstance();
         }
@@ -184,13 +183,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             switch(position) {
                 case NEW_RECIPE_FRAGMENT:
-                    return mNewRecipesFragment;
+                    return mBrowseRecipesFragment;
                 case GROCERY_LIST_FRAGMENT:
                     return mGroceryListFragment;
                 case SAVED_RECIPES:
                     return mSavedRecipesFragment;
                 default:
-                    return mNewRecipesFragment;
+                    return mBrowseRecipesFragment;
             }
         }
 
