@@ -84,7 +84,7 @@
     </LinearLayout>
 
     <TextView
-        android:text="@string/ingredients"
+        android:text="@string/num_ingredients"
         style="@style/AppTheme.RecipeDialogText"
         android:layout_gravity="center_horizontal"
         android:paddingTop="10dp"/>
