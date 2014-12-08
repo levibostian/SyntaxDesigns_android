@@ -10,10 +10,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.fragment.BrowseRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.FilterDrawerFragment;
@@ -22,6 +24,7 @@ import edu.uni.cs.syntaxdesigns.fragment.GroceryListFragment;
 import edu.uni.cs.syntaxdesigns.fragment.SavedRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.filter.BrowseRecipesFilterFragment;
 
+import java.lang.reflect.Field;
 import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FilteringFragment.FilterFragmentListener {
@@ -86,6 +89,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
             switch (getActionBar().getSelectedNavigationIndex()) {
                 case NEW_RECIPE_FRAGMENT:
+                    menu.findItem(R.id.search).setVisible(true);
                     addNewRecipeSearchToMenu(menu);
                     return true;
                 case GROCERY_LIST_FRAGMENT:
@@ -107,6 +111,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         menu.findItem(R.id.search).setVisible(true);
         final MenuItem searchItem = menu.findItem(R.id.search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+
+        setSearchIcon(searchView);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String search) {
@@ -124,6 +131,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 return false;
             }
         });
+    }
+
+    private void setSearchIcon(SearchView searchView) {
+        try {
+            Field searchField = SearchView.class.getDeclaredField("mCloseButton");
+            searchField.setAccessible(true);
+
+            ImageView searchButton = (ImageView) searchView.findViewById(R.id.search_button);
+            searchButton.setImageResource(R.drawable.search);
+
+        } catch (NoSuchFieldException e) {
+            Log.e("SearchView", e.getMessage(), e);
+        }
     }
 
     @Override
