@@ -42,6 +42,7 @@ public class WebViewDialogFragment extends DialogFragment {
 
         ImageView imageView = new ImageView(getActivity());
         imageView.setImageResource(R.drawable.abc_ic_clear_normal);
+        imageView.setColorFilter(getResources().getColor(android.R.color.black));
 
         final Dialog dialog = new AlertDialog.Builder(getActivity())
                                 .setView(mHtmlView).setCustomTitle(imageView).create();

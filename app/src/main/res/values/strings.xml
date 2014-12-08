@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Recipe Box</string>
-    <string name="find_recipes">Find Recipes</string>
+    <string name="browse_recipes">Browse Recipes</string>
     <string name="grocery_list">Grocery List</string>
     <string name="saved_recipes">Saved Recipes</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -39,6 +39,8 @@
     <string name="no_results">There were no results for your search.\nTry clearing your filters.</string>
     <string name="retry">Retry</string>
     <string name="loading">Loading....</string>
+    <string name="current_search">Current Search:</string>
+    <string name="clear_search">Clear</string>
 
     <!--YummlyFilterHeaderStrings-->
     <string name="course_header">course^course-</string>
