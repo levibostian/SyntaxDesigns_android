@@ -30,7 +30,8 @@ import retrofit.client.Response;
 import javax.inject.Inject;
 import java.util.ArrayList;
 
-public class SavedRecipesFragment extends FilteringFragment implements SavedRecipesAdapter.SavedRecipesListListener {
+public class SavedRecipesFragment extends FilteringFragment implements SavedRecipesAdapter.SavedRecipesListListener,
+                                                                       SavedRecipesFilterFragment.SavedRecipesListener {
 
     private static final String SAVED_RECIPE_DIALOG = "savedRecipeFragment.savedRecipeDialog";
 
@@ -38,6 +39,9 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
     private ListView mListView;
     private SavedRecipesAdapter mSavedRecipesAdapter;
     private ArrayList<SavedRecipeVo> mSavedRecipes;
+    private ArrayList<SavedRecipeVo> mFilteredRecipes;
+
+    private boolean mSavedRecipesOnly;
 
     @Inject RecipeDao mRecipeDao;
     @Inject IngredientsDao mIngredientsDao;
@@ -58,6 +62,7 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
         SyntaxDesignsApplication.inject(this);
 
         mFilterFragment = SavedRecipesFilterFragment.newInstance();
+        mFilterFragment.setSavedRecipesListener(this);
     }
 
     @Override
@@ -85,21 +90,43 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
         return rootView;
     }
 
+    public void filterByFavorite(boolean favoritesOnly) {
+        mSavedRecipesOnly = favoritesOnly;
+
+        populate();
+        mSavedRecipesAdapter.notifyDataSetChanged();
+    }
+
     private void populate() {
         mSavedRecipes = new ArrayList<SavedRecipeVo>();
         mSavedRecipes = getRecipes();
-        getRecipesById(mSavedRecipes);
+
+        mFilteredRecipes = getFilteredRecipes(mSavedRecipes);
+
+        getRecipesById(mFilteredRecipes);
+    }
+
+    private ArrayList<SavedRecipeVo> getFilteredRecipes(ArrayList<SavedRecipeVo> recipes) {
+        ArrayList<SavedRecipeVo> filteredRecipes = new ArrayList<SavedRecipeVo>();
+
+        for (SavedRecipeVo recipe : recipes) {
+            if ((mSavedRecipesOnly && recipe.isFavorite) || (!mSavedRecipesOnly && !recipe.isFavorite)) {
+                filteredRecipes.add(recipe);
+            }
+        }
+
+        return filteredRecipes;
     }
 
     private void initializeSavedRecipesAdapter(ArrayList<RecipeIdVo> recipes) {
-        mSavedRecipesAdapter = new SavedRecipesAdapter(getActivity(), recipes, mSavedRecipes);
+        mSavedRecipesAdapter = new SavedRecipesAdapter(getActivity(), recipes, mFilteredRecipes);
         mSavedRecipesAdapter.setListener(this);
         mListView.setAdapter(mSavedRecipesAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SavedRecipeDialogFragment.newInstance(mSavedRecipesAdapter.getItem(position), mSavedRecipes.get(position)).show(getActivity().getFragmentManager(), SAVED_RECIPE_DIALOG);
+                SavedRecipeDialogFragment.newInstance(mSavedRecipesAdapter.getItem(position), mFilteredRecipes.get(position)).show(getActivity().getFragmentManager(), SAVED_RECIPE_DIALOG);
             }
         });
     }
