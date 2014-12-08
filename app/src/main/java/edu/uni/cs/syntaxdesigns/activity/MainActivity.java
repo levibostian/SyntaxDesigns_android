@@ -90,13 +90,16 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             switch (getActionBar().getSelectedNavigationIndex()) {
                 case NEW_RECIPE_FRAGMENT:
                     menu.findItem(R.id.search).setVisible(true);
+                    menu.findItem(R.id.action_filter).setVisible(true);
                     addNewRecipeSearchToMenu(menu);
                     return true;
                 case GROCERY_LIST_FRAGMENT:
                     menu.findItem(R.id.search).setVisible(false);
+                    menu.findItem(R.id.action_filter).setVisible(true);
                     return true;
                 case SAVED_RECIPES:
                     menu.findItem(R.id.search).setVisible(false);
+                    menu.findItem(R.id.action_filter).setVisible(false);
                     return true;
                 default:
                     return false;
