@@ -72,4 +72,10 @@ public class IngredientsDao {
                                  new String[]{String.valueOf(rowId)});
     }
 
+    public void deleteIngredient(long recipeRowId) {
+        mWritableDatabase.delete(IngredientsTable.TABLE_NAME,
+                                 "recipeId = ?",
+                                 new String[]{String.valueOf(recipeRowId)});
+    }
+
 }
