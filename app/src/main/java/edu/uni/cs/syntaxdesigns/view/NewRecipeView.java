@@ -1,11 +1,5 @@
 package edu.uni.cs.syntaxdesigns.view;
 
-import edu.uni.cs.syntaxdesigns.Adapters.RecipeDialogIngredientsListAdapter;
-import edu.uni.cs.syntaxdesigns.R;
-import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
-import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
-import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
-import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
@@ -17,8 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
+import edu.uni.cs.syntaxdesigns.Adapters.RecipeDialogIngredientsListAdapter;
+import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
+import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
+import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
+import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
 
 import javax.inject.Inject;
 
@@ -26,6 +25,7 @@ public class NewRecipeView extends LinearLayout {
 
     private PhraseResults mResults;
 
+    private ImageView mCloseDialog;
     private TextView mRecipeName;
     private ImageView mRecipeImage;
     private Button mSaveRecipe;
@@ -35,6 +35,7 @@ public class NewRecipeView extends LinearLayout {
     private ListView mListView;
     private Button mViewDirections;
     private RecipeDialogIngredientsListAdapter mAdapter;
+
     private DetailsListener mCallback;
 
     private Resources mResources;
@@ -62,6 +63,7 @@ public class NewRecipeView extends LinearLayout {
         mResources = mContext.getResources();
         SyntaxDesignsApplication.inject(this);
 
+        mCloseDialog = (ImageView) findViewById(R.id.close_dialog);
         mRecipeName = (TextView) findViewById(R.id.recipe_name);
         mListView = (ListView) findViewById(R.id.ingredients_list);
         mTime = (TextView) findViewById(R.id.time_in_minutes);
@@ -81,10 +83,17 @@ public class NewRecipeView extends LinearLayout {
 
         initializeListView();
 
+        mCloseDialog.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.closeDialog();
+            }
+        });
+
         mViewDirections.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback.startRecipeDetials(mResults.id);
+                mCallback.startRecipeDetails(mResults.id);
             }
         });
 
@@ -129,7 +138,8 @@ public class NewRecipeView extends LinearLayout {
     }
 
     public interface DetailsListener {
-        void startRecipeDetials(String recipeId);
+        void startRecipeDetails(String recipeId);
         void updateDatabaseAndCloseDialog();
+        void closeDialog();
     }
 }

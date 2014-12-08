@@ -1,6 +1,14 @@
 package edu.uni.cs.syntaxdesigns.fragment.dialog;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.Window;
+import android.widget.Toast;
+import com.squareup.otto.Bus;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
@@ -8,21 +16,10 @@ import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
-import edu.uni.cs.syntaxdesigns.view.HtmlView;
 import edu.uni.cs.syntaxdesigns.view.NewRecipeView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.view.Window;
-import android.widget.Toast;
-
-import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
@@ -66,12 +63,7 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
 
         mDialog = new AlertDialog.Builder(getActivity())
                 .setView(mNewRecipeView)
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dismiss();
-                    }
-                }).create();
+                .create();
 
         mDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
@@ -85,7 +77,7 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
     }
 
     @Override
-    public void startRecipeDetials(final String recipeId) {
+    public void startRecipeDetails(final String recipeId) {
         mYummlyApi.searchByRecipeId(recipeId,
                                     YummlyUtil.getApplicationId(getActivity()),
                                     YummlyUtil.getApplicationKey(getActivity()),
@@ -107,6 +99,11 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
     public void updateDatabaseAndCloseDialog() {
         mDialog.dismiss();
         mBus.post(new DatabaseUpdateEvent());
+    }
+
+    @Override
+    public void closeDialog() {
+        getDialog().cancel();
     }
 
     @Override

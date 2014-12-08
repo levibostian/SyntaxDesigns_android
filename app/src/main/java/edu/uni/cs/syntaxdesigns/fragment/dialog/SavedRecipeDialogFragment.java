@@ -1,5 +1,13 @@
 package edu.uni.cs.syntaxdesigns.fragment.dialog;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.view.Window;
+import android.widget.Toast;
+import com.squareup.otto.Bus;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
@@ -12,16 +20,6 @@ import edu.uni.cs.syntaxdesigns.view.SavedRecipeView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.DialogInterface;
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.view.Window;
-import android.widget.Toast;
-
-import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
@@ -66,13 +64,7 @@ public class SavedRecipeDialogFragment extends DialogFragment implements SavedRe
 
         mDialog = new AlertDialog.Builder(getActivity())
                           .setView(mSavedRecipeView)
-                          .setNegativeButton(mResources.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-            }
-        }).create();
-
+                          .create();
 
         mDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
