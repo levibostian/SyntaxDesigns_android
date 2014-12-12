@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="divider">#ff363636</color>
+    <color name="list_background">#FF3F51B5</color>
+    <color name="off_black">#ff636363</color>
+    <color name="light_black">#ffafafaf</color>
 </resources>

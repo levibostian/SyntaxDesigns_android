@@ -5,12 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TableLayout;
 import edu.uni.cs.syntaxdesigns.Adapters.IngredientsListAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
@@ -21,7 +17,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewRecipesFilterFragment extends Fragment implements IngredientsListAdapter.IngredientsGridListener {
+public class BrowseRecipesFilterFragment extends Fragment implements IngredientsListAdapter.IngredientsGridListener {
 
     private static final String EMPTY_STRING = "";
 
@@ -41,15 +37,15 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
 
     @Inject FilterSearchUtil mFilterSearchUtil;
 
-    public static NewRecipesFilterFragment newInstance() {
-        NewRecipesFilterFragment fragment = new NewRecipesFilterFragment();
+    public static BrowseRecipesFilterFragment newInstance() {
+        BrowseRecipesFilterFragment fragment = new BrowseRecipesFilterFragment();
 
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_new_recipes_filter, container, false);
+        View view = inflater.inflate(R.layout.fragment_browse_recipes_filter, container, false);
 
         mWithIngredients = (EditText) view.findViewById(R.id.with_ingredient_edit_text);
         mWithoutIngredients = (EditText) view.findViewById(R.id.without_ingredient_edit_text);
@@ -87,7 +83,7 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
 
                     mWithIngredients.setText(EMPTY_STRING);
 
-                    updateNewRecipeFragment();
+                    updateBrowseRecipeFragment();
                 }
             }
         });
@@ -106,7 +102,7 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
 
                     mWithoutIngredients.setText(EMPTY_STRING);
 
-                    updateNewRecipeFragment();
+                    updateBrowseRecipeFragment();
                 }
             }
         });
@@ -116,7 +112,7 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
             public void onClick(View v) {
                 if (!mTime.getText().toString().matches(EMPTY_STRING)) {
                     mFilterSearchUtil.withTime(mTime.getText().toString());
-                    updateNewRecipeFragment();
+                    updateBrowseRecipeFragment();
                 }
             }
         });
@@ -135,7 +131,7 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
                 if (mWithoutIngredientsAdapter != null) {
                     mWithoutIngredientsAdapter.notifyDataSetChanged();
                 }
-                updateNewRecipeFragment();
+                updateBrowseRecipeFragment();
             }
         });
     }
@@ -154,14 +150,14 @@ public class NewRecipesFilterFragment extends Fragment implements IngredientsLis
         mWithoutIngredientsList.setAdapter(mWithoutIngredientsAdapter);
     }
 
-    private void updateNewRecipeFragment() {
+    private void updateBrowseRecipeFragment() {
         mCallback.updateNewRecipeSearch(mFilterSearchUtil.getWithIngredients(), mFilterSearchUtil.getWithoutIngredients(),mFilterSearchUtil.getWithCourse(), mFilterSearchUtil.getTime());
     }
 
     @Override
     public void removeWithIngredientFromFilterUtil(String ingredient) {
         mFilterSearchUtil.removeWithIngredient(ingredient);
-        updateNewRecipeFragment();
+        updateBrowseRecipeFragment();
     }
 
     @Override

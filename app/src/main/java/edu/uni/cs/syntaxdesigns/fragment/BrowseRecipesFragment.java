@@ -10,15 +10,14 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
 import edu.uni.cs.syntaxdesigns.VOs.SearchByPhraseVo;
 import edu.uni.cs.syntaxdesigns.activity.MainActivity;
-import edu.uni.cs.syntaxdesigns.adapter.SearchRecipesAdapter;
+import edu.uni.cs.syntaxdesigns.adapter.BrowseRecipesListAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.fragment.dialog.RecipeDialogFragment;
-import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
+import edu.uni.cs.syntaxdesigns.fragment.filter.BrowseRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.ImageUtil;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
 import edu.uni.cs.syntaxdesigns.view.EmptyView;
@@ -29,13 +28,13 @@ import retrofit.client.Response;
 import javax.inject.Inject;
 import java.util.ArrayList;
 
-public class NewRecipesFragment extends FilteringFragment implements NewRecipesFilterFragment.Callbacks {
+public class BrowseRecipesFragment extends FilteringFragment implements BrowseRecipesFilterFragment.Callbacks {
 
     private static final String DEFAULT_NEW_RECIPES_SEARCH = "popular";
 
-    private NewRecipesFilterFragment mFilterFragment;
+    private BrowseRecipesFilterFragment mFilterFragment;
     private ListView mListView;
-    private SearchRecipesAdapter mAdapter;
+    private BrowseRecipesListAdapter mAdapter;
     private EmptyView mEmptyView;
     private Button mRetry;
     private Resources mResources;
@@ -44,13 +43,13 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
 
     private String mSearchPhrase;
 
-    private static final String RECIPE_DIALOG = "newRecipes.recipeDialog";
+    private static final String RECIPE_DIALOG = "browseRecipes.recipeDialog";
 
     @Inject ImageUtil mImageUtil;
     @Inject YummlyApi mYummlyApi;
 
-    public static NewRecipesFragment newInstance() {
-        NewRecipesFragment fragment = new NewRecipesFragment();
+    public static BrowseRecipesFragment newInstance() {
+        BrowseRecipesFragment fragment = new BrowseRecipesFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -62,7 +61,7 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
 
         SyntaxDesignsApplication.inject(this);
 
-        mFilterFragment = (NewRecipesFilterFragment) ((MainActivity) getActivity()).getFilterFragment();
+        mFilterFragment = (BrowseRecipesFilterFragment) ((MainActivity) getActivity()).getFilterFragment();
         mFilterFragment.setCallback(this);
     }
 
@@ -103,7 +102,7 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_new_recipes, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_browse_recipes, container, false);
 
         mListView = (ListView) rootView.findViewById(R.id.new_recipe_list_view);
         mEmptyView = (EmptyView) rootView.findViewById(R.id.new_recipes_empty_view);
@@ -163,7 +162,7 @@ public class NewRecipesFragment extends FilteringFragment implements NewRecipesF
     }
 
     private void initializeListViewAdapter(SearchByPhraseVo searchByPhraseResults) {
-        mAdapter = new SearchRecipesAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
+        mAdapter = new BrowseRecipesListAdapter(getActivity(), searchByPhraseResults.getPhraseResults());
         mListView.setAdapter(mAdapter);
         mListView.setEmptyView(mEmptyView);
 

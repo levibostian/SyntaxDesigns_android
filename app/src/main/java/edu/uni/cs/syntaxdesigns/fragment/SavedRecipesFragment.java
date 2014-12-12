@@ -17,6 +17,7 @@ import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
 import edu.uni.cs.syntaxdesigns.adapter.SavedRecipesAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
+import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
 import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
 import edu.uni.cs.syntaxdesigns.fragment.dialog.SavedRecipeDialogFragment;
@@ -38,8 +39,8 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
     private SavedRecipesAdapter mSavedRecipesAdapter;
     private ArrayList<SavedRecipeVo> mSavedRecipes;
 
-
     @Inject RecipeDao mRecipeDao;
+    @Inject IngredientsDao mIngredientsDao;
     @Inject YummlyApi mYummlyApi;
     @Inject Bus mBus;
 
@@ -88,7 +89,6 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
         mSavedRecipes = new ArrayList<SavedRecipeVo>();
         mSavedRecipes = getRecipes();
         getRecipesById(mSavedRecipes);
-
     }
 
     private void initializeSavedRecipesAdapter(ArrayList<RecipeIdVo> recipes) {
@@ -151,14 +151,26 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
         populate();
     }
 
-
     @Override
     public Fragment getFilterFragment() {
         return mFilterFragment;
     }
 
     @Override
-    public void onRecipeDaoUpdate(int id, boolean isFavorite) {
+    public void onRecipeDaoUpdate(long id, boolean isFavorite) {
         mRecipeDao.favoriteRecipe(id, isFavorite);
     }
+
+    @Override
+    public void onRecipeDeleted(long rowId, int listPos) {
+        mRecipeDao.deleteRecipe(rowId);
+        mIngredientsDao.deleteIngredient(rowId);
+        mSavedRecipes.remove(listPos);
+        mSavedRecipesAdapter.notifyDataSetChanged();
+
+        mBus.post(new DatabaseUpdateEvent());
+
+        populate();
+    }
+
 }

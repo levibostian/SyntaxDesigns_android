@@ -5,24 +5,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.fragment.BrowseRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.FilterDrawerFragment;
 import edu.uni.cs.syntaxdesigns.fragment.FilteringFragment;
 import edu.uni.cs.syntaxdesigns.fragment.GroceryListFragment;
-import edu.uni.cs.syntaxdesigns.fragment.NewRecipesFragment;
 import edu.uni.cs.syntaxdesigns.fragment.SavedRecipesFragment;
-import edu.uni.cs.syntaxdesigns.fragment.filter.NewRecipesFilterFragment;
+import edu.uni.cs.syntaxdesigns.fragment.filter.BrowseRecipesFilterFragment;
 
+import java.lang.reflect.Field;
 import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener, FilteringFragment.FilterFragmentListener {
@@ -44,7 +46,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mFilterDrawerFragment = (FilterDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-        mFilterDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), NewRecipesFilterFragment.newInstance());
+        mFilterDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), BrowseRecipesFilterFragment.newInstance());
 
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -87,13 +89,17 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
             switch (getActionBar().getSelectedNavigationIndex()) {
                 case NEW_RECIPE_FRAGMENT:
+                    menu.findItem(R.id.search).setVisible(true);
+                    menu.findItem(R.id.action_filter).setVisible(true);
                     addNewRecipeSearchToMenu(menu);
                     return true;
                 case GROCERY_LIST_FRAGMENT:
                     menu.findItem(R.id.search).setVisible(false);
+                    menu.findItem(R.id.action_filter).setVisible(true);
                     return true;
                 case SAVED_RECIPES:
                     menu.findItem(R.id.search).setVisible(false);
+                    menu.findItem(R.id.action_filter).setVisible(false);
                     return true;
                 default:
                     return false;
@@ -108,12 +114,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         menu.findItem(R.id.search).setVisible(true);
         final MenuItem searchItem = menu.findItem(R.id.search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+
+        setSearchIcon(searchView);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String search) {
                 if (!search.matches("")) {
                     searchView.onActionViewCollapsed();
-                    mSectionsPagerAdapter.mNewRecipesFragment.startSearchByPhrase(search);
+                    mSectionsPagerAdapter.mBrowseRecipesFragment.startSearchByPhrase(search);
                     return true;
                 }
 
@@ -125,6 +134,19 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 return false;
             }
         });
+    }
+
+    private void setSearchIcon(SearchView searchView) {
+        try {
+            Field searchField = SearchView.class.getDeclaredField("mCloseButton");
+            searchField.setAccessible(true);
+
+            ImageView searchButton = (ImageView) searchView.findViewById(R.id.search_button);
+            searchButton.setImageResource(R.drawable.search);
+
+        } catch (NoSuchFieldException e) {
+            Log.e("SearchView", e.getMessage(), e);
+        }
     }
 
     @Override
@@ -168,14 +190,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private NewRecipesFragment mNewRecipesFragment;
+        private BrowseRecipesFragment mBrowseRecipesFragment;
         private GroceryListFragment mGroceryListFragment;
         private SavedRecipesFragment mSavedRecipesFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
 
-            mNewRecipesFragment = NewRecipesFragment.newInstance();
+            mBrowseRecipesFragment = BrowseRecipesFragment.newInstance();
             mGroceryListFragment = GroceryListFragment.newInstance();
             mSavedRecipesFragment = SavedRecipesFragment.newInstance();
         }
@@ -184,13 +206,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             switch(position) {
                 case NEW_RECIPE_FRAGMENT:
-                    return mNewRecipesFragment;
+                    return mBrowseRecipesFragment;
                 case GROCERY_LIST_FRAGMENT:
                     return mGroceryListFragment;
                 case SAVED_RECIPES:
                     return mSavedRecipesFragment;
                 default:
-                    return mNewRecipesFragment;
+                    return mBrowseRecipesFragment;
             }
         }
 

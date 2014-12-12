@@ -13,12 +13,12 @@ import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 
 import java.util.List;
 
-public class SearchRecipesAdapter extends BaseArrayAdapter {
+public class BrowseRecipesListAdapter extends BaseArrayAdapter {
 
     private List<PhraseResults> mResults;
     private Resources mResources;
 
-    public SearchRecipesAdapter(Context context, List<PhraseResults> results) {
+    public BrowseRecipesListAdapter(Context context, List<PhraseResults> results) {
         super(context, 0, results);
 
         mResults = results;
@@ -40,7 +40,7 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
         ViewHolder viewHolder;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.new_recipes_list_row, parent, false);
+            convertView = mInflater.inflate(R.layout.browse_recipes_list_row, parent, false);
 
             viewHolder = new ViewHolder();
 
@@ -58,7 +58,7 @@ public class SearchRecipesAdapter extends BaseArrayAdapter {
         PhraseResults results = mResults.get(position);
 
         viewHolder.recipeName.setText(results.recipeName);
-        viewHolder.rating.setText(" " + Integer.toString(results.rating) + " " + mResources.getString(R.string.stars));
+        viewHolder.rating.setText(" " + Integer.toString(results.rating) + "/5 " + mResources.getString(R.string.stars));
         viewHolder.numberOfIngredients.setText(" " + Integer.toString(results.ingredients.size()));
         viewHolder.timeToCook.setText(" " + Integer.toString(results.totalTimeInSeconds / 60) + " ");
 

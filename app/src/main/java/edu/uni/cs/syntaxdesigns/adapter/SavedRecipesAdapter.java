@@ -1,8 +1,5 @@
 package edu.uni.cs.syntaxdesigns.adapter;
 
-import edu.uni.cs.syntaxdesigns.R;
-import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
-import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
 import android.content.Context;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
@@ -10,9 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
+import edu.uni.cs.syntaxdesigns.R;
+import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
+import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,9 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
         TextView rating;
         TextView timeToCook;
         ImageView recipeImage;
-        CheckBox favorite;
+        CheckBox star;
+        LinearLayout favorite;
+        LinearLayout delete;
     }
 
     @Override
@@ -56,7 +58,9 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
             viewHolder.numberOfIngredients = (TextView) convertView.findViewById(R.id.number_of_ingredients);
             viewHolder.timeToCook = (TextView) convertView.findViewById(R.id.time_to_cook);
             viewHolder.recipeImage = (ImageView) convertView.findViewById(R.id.recipe_image);
-            viewHolder.favorite = (CheckBox) convertView.findViewById(R.id.favorite);
+            viewHolder.favorite = (LinearLayout) convertView.findViewById(R.id.favorite);
+            viewHolder.star = (CheckBox) convertView.findViewById(R.id.favorite_star);
+            viewHolder.delete = (LinearLayout) convertView.findViewById(R.id.delete_recipe);
 
             convertView.setTag(viewHolder);
         } else {
@@ -68,14 +72,23 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
         viewHolder.recipeName.setText(recipe.name);
         viewHolder.numberOfIngredients.setText(" " + recipe.ingredientLines.size());
         viewHolder.timeToCook.setText(" " + recipe.totalTime);
-        viewHolder.rating.setText(" " + Integer.toString(recipe.rating) + " " + mResources.getString(R.string.stars));
-        viewHolder.favorite.setChecked(mSavedRecipeVos.get(position).isFavorite);
+        viewHolder.rating.setText(" " + Integer.toString(recipe.rating) + "/5 " + mResources.getString(R.string.stars));
+        viewHolder.star.setChecked(mSavedRecipeVos.get(position).isFavorite);
 
         viewHolder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSavedRecipeVos.get(position).isFavorite = viewHolder.favorite.isChecked();
-                mSavedRecipesListListener.onRecipeDaoUpdate(position + 1, viewHolder.favorite.isChecked());
+                viewHolder.star.setChecked(!viewHolder.star.isChecked());
+                mSavedRecipeVos.get(position).isFavorite = viewHolder.star.isChecked();
+                mSavedRecipesListListener.onRecipeDaoUpdate(position + 1, viewHolder.star.isChecked());
+            }
+        });
+
+        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecipes.remove(position);
+                mSavedRecipesListListener.onRecipeDeleted(mSavedRecipeVos.get(position).rowId, position);
             }
         });
 
@@ -99,6 +112,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
     }
 
     public interface SavedRecipesListListener {
-        void onRecipeDaoUpdate(int id, boolean isFavorite);
+        void onRecipeDaoUpdate(long id, boolean isFavorite);
+        void onRecipeDeleted(long rowId, int listPos);
     }
 }
