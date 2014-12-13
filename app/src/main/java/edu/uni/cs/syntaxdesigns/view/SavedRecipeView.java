@@ -1,7 +1,6 @@
 package edu.uni.cs.syntaxdesigns.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,7 @@ public class SavedRecipeView extends LinearLayout {
     private RecipeIdVo mRecipe;
     private TextView mRecipeName;
     private ImageView mRecipeImage;
-    private TextView mRating;
+    private RatingsView mRating;
     private TextView mTime;
     private ListView mListView;
     private Button mViewDirections;
@@ -31,7 +30,6 @@ public class SavedRecipeView extends LinearLayout {
     private SavedRecipeViewListener mListener;
     private CheckBox mFavorite;
 
-    private Resources mResources;
     private Context mContext;
 
     public SavedRecipeView(Context context, RecipeIdVo recipe, SavedRecipeVo savedRecipeVo) {
@@ -51,14 +49,13 @@ public class SavedRecipeView extends LinearLayout {
     private void initialize(Context context) {
         LayoutInflater.from(context).inflate(R.layout.saved_recipe_dialog_view, this);
 
-        mResources = context.getResources();
         mContext = context;
 
         mCloseDialog = (ImageView) findViewById(R.id.close_dialog);
         mRecipeName = (TextView) findViewById(R.id.recipe_name);
         mListView = (ListView) findViewById(R.id.ingredients_list);
         mTime = (TextView) findViewById(R.id.time_in_minutes);
-        mRating = (TextView) findViewById(R.id.rating_by_stars);
+        mRating = (RatingsView) findViewById(R.id.rating_by_stars);
         mViewDirections = (Button) findViewById(R.id.view_directions);
         mRecipeImage = (ImageView) findViewById(R.id.recipe_image);
         mFavorite= (CheckBox) findViewById(R.id.dialog_favorite);
@@ -112,7 +109,7 @@ public class SavedRecipeView extends LinearLayout {
     private void setTextViews() {
         mRecipeName.setText(mRecipe.name);
         mTime.setText(" " + mRecipe.totalTime);
-        mRating.setText(" " + mRecipe.rating + " " + mResources.getString(R.string.stars));
+        mRating.setRating(mRecipe.rating);
     }
 
     public interface SavedRecipeViewListener {

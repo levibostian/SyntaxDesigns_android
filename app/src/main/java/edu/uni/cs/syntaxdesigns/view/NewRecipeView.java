@@ -31,7 +31,7 @@ public class NewRecipeView extends LinearLayout {
     private ImageView mRecipeImage;
     private Button mSaveRecipe;
     private Context mContext;
-    private TextView mRating;
+    private RatingsView mRating;
     private TextView mTime;
     private ListView mListView;
     private Button mViewDirections;
@@ -68,7 +68,7 @@ public class NewRecipeView extends LinearLayout {
         mRecipeName = (TextView) findViewById(R.id.recipe_name);
         mListView = (ListView) findViewById(R.id.ingredients_list);
         mTime = (TextView) findViewById(R.id.time_in_minutes);
-        mRating = (TextView) findViewById(R.id.rating_by_stars);
+        mRating = (RatingsView) findViewById(R.id.rating_by_stars);
         mViewDirections = (Button) findViewById(R.id.view_directions);
         mSaveRecipe = (Button) findViewById(R.id.save_recipe);
         mRecipeImage = (ImageView) findViewById(R.id.recipe_image);
@@ -119,7 +119,7 @@ public class NewRecipeView extends LinearLayout {
     private void setTextViews() {
         mRecipeName.setText(mResults.recipeName);
         mTime.setText(" " + Integer.toString(mResults.totalTimeInSeconds / 60) + " " + mResources.getString(R.string.minutes));
-        mRating.setText(" " + mResults.rating + " " + mResources.getString(R.string.stars));
+        mRating.setRating(mResults.rating);
     }
 
     public void saveRecipe(PhraseResults recipe) {
