@@ -16,6 +16,7 @@ import edu.uni.cs.syntaxdesigns.Adapters.RecipeDialogIngredientsListAdapter;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
+import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
 
@@ -122,6 +123,13 @@ public class NewRecipeView extends LinearLayout {
     }
 
     public void saveRecipe(PhraseResults recipe) {
+        RecipeCursor cursor = mRecipeDao.readRecipesByYummlyUrl(recipe.id);
+        if (cursor.moveToFirst() || cursor.getCount() != 0) {
+            Toast.makeText(mContext, "Recipe already saved.", Toast.LENGTH_LONG).show();
+            cursor.close();
+            return;
+        }
+        cursor.close();
 
         long recipeId = mRecipeDao.insertRecipe(recipe.recipeName, recipe.id);
 
