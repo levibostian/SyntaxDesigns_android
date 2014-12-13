@@ -106,17 +106,22 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
     }
 
     private void getRecipesById(ArrayList<SavedRecipeVo> savedRecipes) {
-        final ArrayList<RecipeIdVo> recipeIdVos = new ArrayList<RecipeIdVo>();
+        getRecipesByIdHelper(savedRecipes, new ArrayList<RecipeIdVo>());
+    }
 
-        for (SavedRecipeVo recipeVo : savedRecipes) {
-            mYummlyApi.searchByRecipeId(recipeVo.yummlyUrl,
+    private void getRecipesByIdHelper(final ArrayList<SavedRecipeVo> savedRecipes, final ArrayList<RecipeIdVo> recipeIds) {
+        if (savedRecipes.size() == recipeIds.size()) {
+            initializeSavedRecipesAdapter(recipeIds);
+        } else {
+            SavedRecipeVo savedRecipe = savedRecipes.get(recipeIds.size());
+            mYummlyApi.searchByRecipeId(savedRecipe.yummlyUrl,
                                         YummlyUtil.getApplicationId(getActivity()),
                                         YummlyUtil.getApplicationKey(getActivity()),
                                         new Callback<RecipeIdVo>() {
                                             @Override
                                             public void success(RecipeIdVo recipeIdVo, Response response) {
-                                                recipeIdVos.add(recipeIdVo);
-                                                initializeSavedRecipesAdapter(recipeIdVos);
+                                                recipeIds.add(recipeIdVo);
+                                                getRecipesByIdHelper(savedRecipes, recipeIds);
                                             }
 
                                             @Override
@@ -125,7 +130,6 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
                                             }
                                         });
         }
-
     }
 
     private ArrayList<SavedRecipeVo> getRecipes() {
