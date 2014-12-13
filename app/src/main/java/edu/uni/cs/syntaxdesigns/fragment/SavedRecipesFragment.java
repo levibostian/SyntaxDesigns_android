@@ -1,6 +1,7 @@
 package edu.uni.cs.syntaxdesigns.fragment;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,14 +9,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.cocosw.undobar.UndoBarController;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.Service.YummlyApi;
+import edu.uni.cs.syntaxdesigns.VOs.IngredientVo;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
 import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
 import edu.uni.cs.syntaxdesigns.adapter.SavedRecipesAdapter;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
+import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
 import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
@@ -175,14 +179,59 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
 
     @Override
     public void onRecipeDeleted(long rowId, int listPos) {
+        final ArrayList<IngredientVo> ingredients = new ArrayList<IngredientVo>();
+        RecipeCursor recipeCursor = mRecipeDao.readRecipeByRowId(rowId);
+        if (recipeCursor.moveToFirst()) {
+            do {
+                if (recipeCursor.isEnabledInGroceryList()) {
+                    readRecipes(ingredients, recipeCursor.readRowId());
+                }
+            } while (recipeCursor.moveToNext());
+        }
+
         mRecipeDao.deleteRecipe(rowId);
-        mIngredientsDao.deleteIngredient(rowId);
-        mSavedRecipes.remove(listPos);
+        mIngredientsDao.deleteIngredientsForRecipe(rowId);
+        final SavedRecipeVo deletedRecipe = mSavedRecipes.remove(listPos);
         mSavedRecipesAdapter.notifyDataSetChanged();
+
+        new UndoBarController.UndoBar(getActivity()).message("Recipe deleted.").listener(new UndoBarController.UndoListener() {
+            @Override
+            public void onUndo(Parcelable parcelable) {
+                mRecipeDao.insertRecipe(deletedRecipe.recipeName, deletedRecipe.yummlyUrl);
+
+                for (IngredientVo ingredient : ingredients) {
+                    mIngredientsDao.insertIngredient(ingredient.name, ingredient.haveIt, ingredient.recipeId);
+                }
+
+                mSavedRecipes.add(deletedRecipe);
+
+                mBus.post(new DatabaseUpdateEvent());
+
+                populate();
+            }
+        }).show();
 
         mBus.post(new DatabaseUpdateEvent());
 
         populate();
+    }
+
+    private void readRecipes(ArrayList<IngredientVo> ingredients, long recipeRowId) {
+        IngredientsCursor cursor = mIngredientsDao.readIngredientsForRecipe(recipeRowId);
+
+        if (cursor.moveToFirst()) {
+            do {
+                IngredientVo ingredient = new IngredientVo();
+                ingredient.rowId = cursor.readRowId();
+                ingredient.name = cursor.readName();
+                ingredient.haveIt = cursor.isHaveIt();
+                ingredient.recipeId = cursor.readRecipeId();
+
+                ingredients.add(ingredient);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
     }
 
 }
