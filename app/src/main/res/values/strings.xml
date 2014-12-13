@@ -42,6 +42,8 @@
     <string name="loading">Loading....</string>
     <string name="current_search">Current Search:</string>
     <string name="clear_search">Clear</string>
+    <string name="empty_grocery_list">You don\'t have any \n saved recipes.</string>
+    <string name="no_selected_recipes_grocery_list">You don\'t have any recipes \n selected in filter.</string>
 
     <!--YummlyFilterHeaderStrings-->
     <string name="course_header">course^course-</string>
