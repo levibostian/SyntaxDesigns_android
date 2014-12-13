@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.cocosw.undobar.UndoBarController;
@@ -41,6 +42,7 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
 
     private SavedRecipesFilterFragment mFilterFragment;
     private ListView mListView;
+    private LinearLayout mEmptyView;
     private SavedRecipesAdapter mSavedRecipesAdapter;
     private ArrayList<SavedRecipeVo> mSavedRecipes;
 
@@ -84,6 +86,7 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
         View rootView = inflater.inflate(R.layout.fragment_saved_recipes, container, false);
 
         mListView = (ListView) rootView.findViewById(R.id.saved_recipes_list);
+        mEmptyView = (LinearLayout) rootView.findViewById(R.id.saved_recipes_list_empty_view);
 
         populate();
 
@@ -97,6 +100,13 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
     }
 
     private void initializeSavedRecipesAdapter(ArrayList<RecipeIdVo> recipes) {
+        if (mSavedRecipes.size() == 0) {
+            mEmptyView.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.GONE);
+        } else {
+            mEmptyView.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+        }
         mSavedRecipesAdapter = new SavedRecipesAdapter(getActivity(), recipes, mSavedRecipes, mIngredientsDao);
         mSavedRecipesAdapter.setListener(this);
         mListView.setAdapter(mSavedRecipesAdapter);

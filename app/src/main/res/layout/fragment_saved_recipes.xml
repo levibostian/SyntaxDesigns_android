@@ -11,4 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <LinearLayout
+        android:id="@+id/saved_recipes_list_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_saved_recipes_list"
+            android:textSize="20sp"
+            android:gravity="center_horizontal"
+            android:paddingTop="30dp"/>
+
+    </LinearLayout>
+
 </LinearLayout>
