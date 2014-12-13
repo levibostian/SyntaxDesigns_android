@@ -79,12 +79,10 @@
                         android:textSize="16sp"
                         android:text="@string/rating"/>
 
-                    <TextView
-                        android:id="@+id/rating"
+                    <edu.uni.cs.syntaxdesigns.view.RatingsView
+                        android:id="@+id/saved_recipes_rating"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        tools:text=" 5/5 Stars"/>
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 

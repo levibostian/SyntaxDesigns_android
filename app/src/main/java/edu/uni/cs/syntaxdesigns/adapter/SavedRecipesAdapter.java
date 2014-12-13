@@ -15,6 +15,7 @@ import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
 import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
 import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
+import edu.uni.cs.syntaxdesigns.view.RatingsView;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
     private static final class ViewHolder {
         TextView recipeName;
         TextView numberOfIngredients;
-        TextView rating;
+        RatingsView rating;
         TextView timeToCook;
         ImageView recipeImage;
         CheckBox star;
@@ -58,7 +59,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
             viewHolder = new ViewHolder();
 
             viewHolder.recipeName = (TextView) convertView.findViewById(R.id.recipe_name);
-            viewHolder.rating = (TextView) convertView.findViewById(R.id.rating);
+            viewHolder.rating = (RatingsView) convertView.findViewById(R.id.saved_recipes_rating);
             viewHolder.numberOfIngredients = (TextView) convertView.findViewById(R.id.number_of_ingredients);
             viewHolder.timeToCook = (TextView) convertView.findViewById(R.id.time_to_cook);
             viewHolder.recipeImage = (ImageView) convertView.findViewById(R.id.recipe_image);
@@ -77,7 +78,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
         viewHolder.numberOfIngredients.setText(" " + getNumberOfIngredientsHave(mSavedRecipeVos.get(position).rowId) + "/" + recipe.ingredientLines.size());
         colorIngredientCount(viewHolder.numberOfIngredients, mSavedRecipeVos.get(position).rowId, recipe);
         viewHolder.timeToCook.setText(" " + recipe.totalTime);
-        viewHolder.rating.setText(" " + Integer.toString(recipe.rating) + "/5 " + mResources.getString(R.string.stars));
+        viewHolder.rating.setRating(recipe.rating);
         viewHolder.star.setChecked(mSavedRecipeVos.get(position).isFavorite);
 
         viewHolder.favorite.setOnClickListener(new View.OnClickListener() {
