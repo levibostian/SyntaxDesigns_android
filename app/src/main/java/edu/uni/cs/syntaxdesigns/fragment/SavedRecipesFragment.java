@@ -94,6 +94,7 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
     }
 
     private void populate() {
+        mEmptyView.setVisibility(View.GONE);
         mSavedRecipes = new ArrayList<SavedRecipeVo>();
         mSavedRecipes = getRecipes();
         getRecipesById(mSavedRecipes);
