@@ -20,6 +20,7 @@ import edu.uni.cs.syntaxdesigns.database.cursor.RecipeCursor;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 import edu.uni.cs.syntaxdesigns.database.dao.RecipeDao;
 import edu.uni.cs.syntaxdesigns.event.DatabaseUpdateEvent;
+import edu.uni.cs.syntaxdesigns.event.GroceryListUpdateEvent;
 import edu.uni.cs.syntaxdesigns.fragment.dialog.SavedRecipeDialogFragment;
 import edu.uni.cs.syntaxdesigns.fragment.filter.SavedRecipesFilterFragment;
 import edu.uni.cs.syntaxdesigns.util.YummlyUtil;
@@ -92,7 +93,7 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
     }
 
     private void initializeSavedRecipesAdapter(ArrayList<RecipeIdVo> recipes) {
-        mSavedRecipesAdapter = new SavedRecipesAdapter(getActivity(), recipes, mSavedRecipes);
+        mSavedRecipesAdapter = new SavedRecipesAdapter(getActivity(), recipes, mSavedRecipes, mIngredientsDao);
         mSavedRecipesAdapter.setListener(this);
         mListView.setAdapter(mSavedRecipesAdapter);
 
@@ -143,11 +144,18 @@ public class SavedRecipesFragment extends FilteringFragment implements SavedReci
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+
         return recipes;
     }
 
     @Subscribe
     public void onDatabaseUpdatedEvent(DatabaseUpdateEvent event) {
+        populate();
+    }
+
+    @Subscribe
+    public void onGroceryListUpdatedEvent(GroceryListUpdateEvent event) {
         populate();
     }
 

@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
 import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
+import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
+import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
 
 import java.util.ArrayList;
 
@@ -22,13 +24,15 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
     private ArrayList<SavedRecipeVo> mSavedRecipeVos;
     private Resources mResources;
     private SavedRecipesListListener mSavedRecipesListListener;
+    private IngredientsDao mIngredientsDao;
 
-    public SavedRecipesAdapter(Context context, ArrayList<RecipeIdVo> recipes, ArrayList<SavedRecipeVo> savedRecipeVos) {
+    public SavedRecipesAdapter(Context context, ArrayList<RecipeIdVo> recipes, ArrayList<SavedRecipeVo> savedRecipeVos, IngredientsDao ingredientsDao) {
         super(context, 0, recipes);
 
         mRecipes = recipes;
         mResources = context.getResources();
         mSavedRecipeVos = savedRecipeVos;
+        mIngredientsDao = ingredientsDao;
 
         mInflater = LayoutInflater.from(context);
     }
@@ -70,7 +74,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
         RecipeIdVo recipe = mRecipes.get(position);
 
         viewHolder.recipeName.setText(recipe.name);
-        viewHolder.numberOfIngredients.setText(" " + recipe.ingredientLines.size());
+        viewHolder.numberOfIngredients.setText(" " + getNumberOfIngredientsHave(mSavedRecipeVos.get(position).rowId) + "/" + recipe.ingredientLines.size());
         viewHolder.timeToCook.setText(" " + recipe.totalTime);
         viewHolder.rating.setText(" " + Integer.toString(recipe.rating) + "/5 " + mResources.getString(R.string.stars));
         viewHolder.star.setChecked(mSavedRecipeVos.get(position).isFavorite);
@@ -100,6 +104,23 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
                .into(viewHolder.recipeImage);
 
         return convertView;
+    }
+
+    private int getNumberOfIngredientsHave(long rowId) {
+        IngredientsCursor cursor = mIngredientsDao.readIngredientsForRecipe(rowId);
+
+        int numberHave = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                if (cursor.isHaveIt()) {
+                    numberHave += 1;
+                }
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return numberHave;
     }
 
     @Override
