@@ -75,6 +75,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
 
         viewHolder.recipeName.setText(recipe.name);
         viewHolder.numberOfIngredients.setText(" " + getNumberOfIngredientsHave(mSavedRecipeVos.get(position).rowId) + "/" + recipe.ingredientLines.size());
+        colorIngredientCount(viewHolder.numberOfIngredients, mSavedRecipeVos.get(position).rowId, recipe);
         viewHolder.timeToCook.setText(" " + recipe.totalTime);
         viewHolder.rating.setText(" " + Integer.toString(recipe.rating) + "/5 " + mResources.getString(R.string.stars));
         viewHolder.star.setChecked(mSavedRecipeVos.get(position).isFavorite);
@@ -104,6 +105,18 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
                .into(viewHolder.recipeImage);
 
         return convertView;
+    }
+
+    private void colorIngredientCount(TextView numberOfIngredients, long rowId, RecipeIdVo recipe) {
+        Resources resources = getContext().getResources();
+
+        if (getNumberOfIngredientsHave(rowId) == recipe.ingredientLines.size()) {
+            numberOfIngredients.setTextColor(resources.getColor(R.color.all_ingredients));
+        } else if (getNumberOfIngredientsHave(rowId) == 0) {
+            numberOfIngredients.setTextColor(resources.getColor(R.color.no_ingredients));
+        } else {
+            numberOfIngredients.setTextColor(resources.getColor(android.R.color.black));
+        }
     }
 
     private int getNumberOfIngredientsHave(long rowId) {

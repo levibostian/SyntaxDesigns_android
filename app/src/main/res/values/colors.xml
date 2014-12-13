@@ -4,4 +4,6 @@
     <color name="list_background">#FF3F51B5</color>
     <color name="off_black">#ff636363</color>
     <color name="light_black">#ffafafaf</color>
+    <color name="all_ingredients">#ff00af22</color>
+    <color name="no_ingredients">#ffaf0100</color>
 </resources>
