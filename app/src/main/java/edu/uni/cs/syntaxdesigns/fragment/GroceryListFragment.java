@@ -5,7 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import edu.uni.cs.syntaxdesigns.R;
@@ -28,6 +30,8 @@ public class GroceryListFragment extends FilteringFragment {
     private GroceryListFilterFragment mFilterFragment;
 
     private ListView mGroceryList;
+    private LinearLayout mEmptyView;
+    private TextView mEmptyViewText;
 
     @Inject IngredientsDao mIngredientsDao;
     @Inject RecipeDao mRecipeDao;
@@ -67,6 +71,8 @@ public class GroceryListFragment extends FilteringFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_grocery_list, container, false);
 
+        mEmptyView = (LinearLayout) rootView.findViewById(R.id.grocery_list_empty_view);
+        mEmptyViewText = (TextView) rootView.findViewById(R.id.grocery_list_empty_view_text);
         mGroceryList = (ListView) rootView.findViewById(R.id.grocery_list_list);
         populate();
 
@@ -86,8 +92,10 @@ public class GroceryListFragment extends FilteringFragment {
     public void populate() {
         ArrayList<IngredientVo> ingredients = new ArrayList<IngredientVo>();
 
+        int recipeCount = 0;
         RecipeCursor recipeCursor = mRecipeDao.readRecipes();
         if (recipeCursor.moveToFirst()) {
+            recipeCount = recipeCursor.getCount();
             do {
                 if (recipeCursor.isEnabledInGroceryList()) {
                     readRecipes(ingredients, recipeCursor.readRowId());
@@ -95,8 +103,25 @@ public class GroceryListFragment extends FilteringFragment {
             } while (recipeCursor.moveToNext());
         }
 
-        GroceryListAdapter groceryListAdapter = new GroceryListAdapter(getActivity(), ingredients);
-        mGroceryList.setAdapter(groceryListAdapter);
+        if (ingredients.size() == 0) {
+            if (recipeCount == 0) {
+                mEmptyViewText.setText(getResources().getString(R.string.empty_grocery_list));
+            } else {
+                mEmptyViewText.setText(getResources().getString(R.string.no_selected_recipes_grocery_list));
+            }
+            showEmptyView();
+        } else {
+            GroceryListAdapter groceryListAdapter = new GroceryListAdapter(getActivity(), ingredients);
+            mGroceryList.setAdapter(groceryListAdapter);
+
+            mEmptyView.setVisibility(View.GONE);
+            mGroceryList.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showEmptyView() {
+        mGroceryList.setVisibility(View.GONE);
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 
     private void readRecipes(ArrayList<IngredientVo> ingredients, long recipeRowId) {

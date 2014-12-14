@@ -11,7 +11,7 @@
     <string name="action_settings">Settings</string>
     <string name="yummly_error">Error searching for recipes, try the search again</string>
     <string name="filter_results">Filter results</string>
-    <string name="num_ingredients">Number of ingredients: </string>
+    <string name="num_ingredients">Ingredients count: </string>
     <string name="ingredients_list">Ingredients list:</string>
     <string name="time">Time: </string>
     <string name="rating">Rating:</string>
@@ -42,6 +42,9 @@
     <string name="loading">Loading....</string>
     <string name="current_search">Current Search:</string>
     <string name="clear_search">Clear</string>
+    <string name="empty_grocery_list">You don\'t have any \n saved recipes.</string>
+    <string name="no_selected_recipes_grocery_list">You don\'t have any recipes \n selected in filter.</string>
+    <string name="empty_saved_recipes_list">You don\'t have any \n saved recipes.</string>
 
     <!--YummlyFilterHeaderStrings-->
     <string name="course_header">course^course-</string>

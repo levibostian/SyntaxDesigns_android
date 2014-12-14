@@ -13,6 +13,9 @@ import com.squareup.picasso.Picasso;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.RecipeIdVo;
 import edu.uni.cs.syntaxdesigns.VOs.SavedRecipeVo;
+import edu.uni.cs.syntaxdesigns.database.cursor.IngredientsCursor;
+import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
+import edu.uni.cs.syntaxdesigns.view.RatingsView;
 
 import java.util.ArrayList;
 
@@ -22,13 +25,15 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
     private ArrayList<SavedRecipeVo> mSavedRecipeVos;
     private Resources mResources;
     private SavedRecipesListListener mSavedRecipesListListener;
+    private IngredientsDao mIngredientsDao;
 
-    public SavedRecipesAdapter(Context context, ArrayList<RecipeIdVo> recipes, ArrayList<SavedRecipeVo> savedRecipeVos) {
+    public SavedRecipesAdapter(Context context, ArrayList<RecipeIdVo> recipes, ArrayList<SavedRecipeVo> savedRecipeVos, IngredientsDao ingredientsDao) {
         super(context, 0, recipes);
 
         mRecipes = recipes;
         mResources = context.getResources();
         mSavedRecipeVos = savedRecipeVos;
+        mIngredientsDao = ingredientsDao;
 
         mInflater = LayoutInflater.from(context);
     }
@@ -36,7 +41,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
     private static final class ViewHolder {
         TextView recipeName;
         TextView numberOfIngredients;
-        TextView rating;
+        RatingsView rating;
         TextView timeToCook;
         ImageView recipeImage;
         CheckBox star;
@@ -54,7 +59,7 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
             viewHolder = new ViewHolder();
 
             viewHolder.recipeName = (TextView) convertView.findViewById(R.id.recipe_name);
-            viewHolder.rating = (TextView) convertView.findViewById(R.id.rating);
+            viewHolder.rating = (RatingsView) convertView.findViewById(R.id.saved_recipes_rating);
             viewHolder.numberOfIngredients = (TextView) convertView.findViewById(R.id.number_of_ingredients);
             viewHolder.timeToCook = (TextView) convertView.findViewById(R.id.time_to_cook);
             viewHolder.recipeImage = (ImageView) convertView.findViewById(R.id.recipe_image);
@@ -70,9 +75,10 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
         RecipeIdVo recipe = mRecipes.get(position);
 
         viewHolder.recipeName.setText(recipe.name);
-        viewHolder.numberOfIngredients.setText(" " + recipe.ingredientLines.size());
+        viewHolder.numberOfIngredients.setText(" " + getNumberOfIngredientsHave(mSavedRecipeVos.get(position).rowId) + "/" + recipe.ingredientLines.size());
+        colorIngredientCount(viewHolder.numberOfIngredients, mSavedRecipeVos.get(position).rowId, recipe);
         viewHolder.timeToCook.setText(" " + recipe.totalTime);
-        viewHolder.rating.setText(" " + Integer.toString(recipe.rating) + "/5 " + mResources.getString(R.string.stars));
+        viewHolder.rating.setRating(recipe.rating);
         viewHolder.star.setChecked(mSavedRecipeVos.get(position).isFavorite);
 
         viewHolder.favorite.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +106,35 @@ public class SavedRecipesAdapter extends BaseArrayAdapter {
                .into(viewHolder.recipeImage);
 
         return convertView;
+    }
+
+    private void colorIngredientCount(TextView numberOfIngredients, long rowId, RecipeIdVo recipe) {
+        Resources resources = getContext().getResources();
+
+        if (getNumberOfIngredientsHave(rowId) == recipe.ingredientLines.size()) {
+            numberOfIngredients.setTextColor(resources.getColor(R.color.all_ingredients));
+        } else if (getNumberOfIngredientsHave(rowId) == 0) {
+            numberOfIngredients.setTextColor(resources.getColor(R.color.no_ingredients));
+        } else {
+            numberOfIngredients.setTextColor(resources.getColor(android.R.color.black));
+        }
+    }
+
+    private int getNumberOfIngredientsHave(long rowId) {
+        IngredientsCursor cursor = mIngredientsDao.readIngredientsForRecipe(rowId);
+
+        int numberHave = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                if (cursor.isHaveIt()) {
+                    numberHave += 1;
+                }
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return numberHave;
     }
 
     @Override

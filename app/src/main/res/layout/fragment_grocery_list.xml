@@ -11,4 +11,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <LinearLayout
+        android:id="@+id/grocery_list_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/grocery_list_empty_view_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_grocery_list"
+            android:textSize="20sp"
+            android:gravity="center_horizontal"
+            android:paddingTop="30dp"/>
+
+    </LinearLayout>
+
 </LinearLayout>

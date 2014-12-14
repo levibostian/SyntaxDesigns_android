@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.PhraseResults;
+import edu.uni.cs.syntaxdesigns.view.RatingsView;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class BrowseRecipesListAdapter extends BaseArrayAdapter {
     private static class ViewHolder {
         TextView numberOfIngredients;
         TextView recipeName;
-        TextView rating;
+        RatingsView rating;
         TextView timeToCook;
         ImageView recipeImage;
     }
@@ -45,7 +46,7 @@ public class BrowseRecipesListAdapter extends BaseArrayAdapter {
             viewHolder = new ViewHolder();
 
             viewHolder.recipeName = (TextView) convertView.findViewById(R.id.recipe_name);
-            viewHolder.rating = (TextView) convertView.findViewById(R.id.rating);
+            viewHolder.rating = (RatingsView) convertView.findViewById(R.id.rating);
             viewHolder.numberOfIngredients = (TextView) convertView.findViewById(R.id.number_of_ingredients);
             viewHolder.timeToCook = (TextView) convertView.findViewById(R.id.time_to_cook);
             viewHolder.recipeImage = (ImageView) convertView.findViewById(R.id.recipe_image);
@@ -58,7 +59,7 @@ public class BrowseRecipesListAdapter extends BaseArrayAdapter {
         PhraseResults results = mResults.get(position);
 
         viewHolder.recipeName.setText(results.recipeName);
-        viewHolder.rating.setText(" " + Integer.toString(results.rating) + "/5 " + mResources.getString(R.string.stars));
+        viewHolder.rating.setRating(results.rating);
         viewHolder.numberOfIngredients.setText(" " + Integer.toString(results.ingredients.size()));
         viewHolder.timeToCook.setText(" " + Integer.toString(results.totalTimeInSeconds / 60) + " ");
 

@@ -27,11 +27,17 @@ public class RecipeDao {
         return mWritableDatabase.insert(RecipeTable.TABLE_NAME, "null", values);
     }
 
+    public RecipeCursor readRecipesByYummlyUrl(String yummlyUrl) {
+        return new RecipeCursor(mReadableDatabase.query(RecipeTable.TABLE_NAME,
+                                                        new String[]{"*"},
+                                                        RecipeTable.Columns.COLUMN_YUMMLY_URL.name + " = ?",
+                                                        new String[]{yummlyUrl},
+                                                        null,
+                                                        null,
+                                                        null));
+    }
+
     public RecipeCursor readRecipes() {
-        String[] columns = {RecipeTable.Columns._ID,
-                            RecipeTable.Columns.COLUMN_NAME.name,
-                            RecipeTable.Columns.COLUMN_FAVORITE.name,
-                            RecipeTable.Columns.COLUMN_YUMMLY_URL.name};
         return new RecipeCursor(mReadableDatabase.query(RecipeTable.TABLE_NAME,
                                       new String[] {"*"},
                                       null,

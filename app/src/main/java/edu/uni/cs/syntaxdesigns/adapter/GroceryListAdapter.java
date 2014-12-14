@@ -7,11 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import com.squareup.otto.Bus;
 import edu.uni.cs.syntaxdesigns.R;
 import edu.uni.cs.syntaxdesigns.VOs.IngredientVo;
 import edu.uni.cs.syntaxdesigns.application.SyntaxDesignsApplication;
 import edu.uni.cs.syntaxdesigns.database.dao.IngredientsDao;
-import edu.uni.cs.syntaxdesigns.util.LogUtil;
+import edu.uni.cs.syntaxdesigns.event.GroceryListUpdateEvent;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class GroceryListAdapter extends ArrayAdapter<IngredientVo> {
 
     @Inject IngredientsDao mIngredientsDao;
+    @Inject Bus mBus;
 
     private Context mContext;
     private ArrayList<IngredientVo> mIngredients;
@@ -48,6 +50,8 @@ public class GroceryListAdapter extends ArrayAdapter<IngredientVo> {
             public void onClick(View v) {
                 ingredient.haveIt = checkBox.isChecked();
                 updateIngredientStatus(position + 1, checkBox.isChecked());
+
+                mBus.post(new GroceryListUpdateEvent());
             }
         });
 

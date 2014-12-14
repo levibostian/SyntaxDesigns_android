@@ -95,9 +95,10 @@
                     android:text="@string/rating"
                     style="@style/AppTheme.RecipeDialogText"/>
 
-                <TextView
+                <edu.uni.cs.syntaxdesigns.view.RatingsView
                     android:id="@+id/rating_by_stars"
-                    style="@style/AppTheme.RecipeDialogText"/>
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"/>
 
             </LinearLayout>
 
