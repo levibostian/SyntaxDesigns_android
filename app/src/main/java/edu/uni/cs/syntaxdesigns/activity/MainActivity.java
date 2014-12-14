@@ -156,6 +156,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                 return true;
             case R.id.action_filter:
                 if (mFilterDrawerFragment.isDrawerOpen()) {
+                    hideSoftKeyboard();
                     mDrawerLayout.closeDrawer(Gravity.RIGHT);
                 } else {
                     mDrawerLayout.openDrawer(Gravity.RIGHT);
