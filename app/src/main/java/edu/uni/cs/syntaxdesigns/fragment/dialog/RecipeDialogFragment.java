@@ -3,7 +3,9 @@ package edu.uni.cs.syntaxdesigns.fragment.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.Window;
@@ -84,8 +86,9 @@ public class RecipeDialogFragment extends DialogFragment implements DetailsListe
                                     new Callback<RecipeIdVo>() {
                                         @Override
                                         public void success(RecipeIdVo recipeIdVo, Response response) {
-                                            WebViewDialogFragment.newInstance(recipeIdVo.source.sourceRecipeUrl).show(getActivity().getFragmentManager(),
-                                                                                                                      WEB_VIEW_DIALOG);
+                                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                                            intent.setData(Uri.parse(recipeIdVo.source.sourceRecipeUrl));
+                                            startActivity(intent);
                                         }
 
                                         @Override
