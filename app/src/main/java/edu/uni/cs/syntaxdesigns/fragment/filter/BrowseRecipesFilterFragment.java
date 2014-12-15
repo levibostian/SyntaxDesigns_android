@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import edu.uni.cs.syntaxdesigns.Adapters.IngredientsListAdapter;
@@ -83,6 +84,7 @@ public class BrowseRecipesFilterFragment extends Fragment implements Ingredients
 
                     mWithIngredients.setText(EMPTY_STRING);
 
+                    hideSoftKeyboard();
                     updateBrowseRecipeFragment();
                 }
             }
@@ -101,7 +103,7 @@ public class BrowseRecipesFilterFragment extends Fragment implements Ingredients
                     }
 
                     mWithoutIngredients.setText(EMPTY_STRING);
-
+                    hideSoftKeyboard();
                     updateBrowseRecipeFragment();
                 }
             }
@@ -112,6 +114,7 @@ public class BrowseRecipesFilterFragment extends Fragment implements Ingredients
             public void onClick(View v) {
                 if (!mTime.getText().toString().matches(EMPTY_STRING)) {
                     mFilterSearchUtil.withTime(mTime.getText().toString());
+                    hideSoftKeyboard();
                     updateBrowseRecipeFragment();
                 }
             }
@@ -170,6 +173,14 @@ public class BrowseRecipesFilterFragment extends Fragment implements Ingredients
                                    ArrayList<String> withoutIngredients,
                                    ArrayList<String> withCourses,
                                    String withTime);
+    }
+
+
+    public void hideSoftKeyboard() {
+        if(getActivity().getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
 }
